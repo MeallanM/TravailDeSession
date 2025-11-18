@@ -36,6 +36,7 @@ namespace TravailDeSession
         {
             InitializeComponent();
         }
+        public static Window fenetrePrincipale;
 
         /// <summary>
         /// Invoked when the application is launched.
@@ -44,6 +45,7 @@ namespace TravailDeSession
         protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
             _window = new MainWindow();
+            fenetrePrincipale = _window;
             _window.Activate();
         }
     }
