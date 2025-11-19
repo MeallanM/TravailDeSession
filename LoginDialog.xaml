@@ -1,0 +1,26 @@
+<ContentDialog
+x:Class="TravailDeSession.LoginDialog"
+xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+Title="Admin Login"
+PrimaryButtonText="Login"
+CloseButtonText="Cancel"
+DefaultButton="Primary">
+
+    <StackPanel Spacing="12">
+
+        <TextBlock Text="Please enter admin credentials:" />
+
+        <TextBox
+        x:Name="tbUsername"
+        Header="Username"
+        PlaceholderText="admin" />
+
+        <PasswordBox
+        x:Name="tbPassword"
+        Header="Password"
+        PlaceholderText="••••••••" />
+
+    </StackPanel>
+
+</ContentDialog>

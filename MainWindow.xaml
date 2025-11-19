@@ -15,5 +15,55 @@
 
     <Grid>
 
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <MenuBar Grid.Row="0" >
+            <MenuBarItem Title="Importer">
+                <MenuFlyoutItem Text="Client" Tag="ClientImport" Click="clickMenuBar"/>
+                <MenuFlyoutItem Text="Employe" Tag="EmployeImport" Click="clickMenuBar" />
+                <MenuFlyoutItem Text="Projet" Tag="ProjetImport" Click="clickMenuBar" />
+            </MenuBarItem>
+            <MenuBarItem Title="Exporter">
+                <MenuFlyoutItem Text="Client" Tag="ClientExport" Click="clickMenuBar"/>
+                <MenuFlyoutItem Text="Employe" Tag="EmployeExport" Click="clickMenuBar" />
+                <MenuFlyoutItem Text="Projet" Tag="ProjetExport" Click="clickMenuBar" />
+            </MenuBarItem>
+            <MenuBarItem Title="Autres">
+                <MenuFlyoutItem Text="Quitter" Tag="Quitter" Click="clickMenuBar"/>
+            </MenuBarItem>
+        </MenuBar>
+
+        <NavigationView PaneDisplayMode="Left" PaneTitle="Gestion de projets" x:Name="navView" ItemInvoked="navView_ItemInvoked" Grid.Row="1" >
+            <NavigationView.MenuItems>
+                <NavigationViewItemHeader Content="Client"/>
+                <NavigationViewItem Content="Afficher les Clients" x:Name="nviShowClients" Icon="Globe" Tag="AfficherClients"/>
+                <NavigationViewItem Content="Ajouter un Client" x:Name="nviAddClient" Icon="Add" Tag="AjouterClient"/>
+                <NavigationViewItem Content="Modifier un Client" x:Name="nviAlterClient" Icon="Refresh" Tag="ModifierClient"/>
+                <NavigationViewItemSeparator />
+                <NavigationViewItemHeader Content="Employés"/>
+                <NavigationViewItem Content="Afficher les Employés" x:Name="nviShowEmployés" Icon="Globe" Tag="AfficherEmployés"/>
+                <NavigationViewItem Content="Ajouter un Employé" x:Name="nviAddEmployé" Icon="Add" Tag="AjouterEmployé"/>
+                <NavigationViewItem Content="Modifier un Employé" x:Name="nviAlterEmployé" Icon="Refresh" Tag="ModifierEmployé"/>
+                <NavigationViewItemSeparator />
+                <NavigationViewItemHeader Content="Projet"/>
+                <NavigationViewItem Content="Afficher les Projets" x:Name="nviShowProjets" Icon="Globe" Tag="AfficherProjets"/>
+                <NavigationViewItem Content="Ajouter un Projet" x:Name="nviAddProjet" Icon="Add" Tag="AjouterProjet"/>
+                <NavigationViewItem Content="Modifier un Projet" x:Name="nviAlterProjet" Icon="Refresh" Tag="ModifierProjet"/>
+                <NavigationViewItemSeparator />
+            </NavigationView.MenuItems>
+
+            <NavigationView.FooterMenuItems>
+                <NavigationViewItem Content="Connexion" x:Name="nviConnection" Icon="Switch" Tag="Connection" />
+                <NavigationViewItem Content="Déconnexion" x:Name="nviDeconnection" Icon="Switch" Tag="Deconnection" />
+                <NavigationViewItem Content="Aide" x:Name="nviAide" Icon="Help" Tag="aide"/>
+            </NavigationView.FooterMenuItems>
+            <Frame x:Name="mainFrame" />
+        </NavigationView>
+        <NavigationViewItemSeparator />
     </Grid>
 </Window>

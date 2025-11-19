@@ -1,7 +1,10 @@
-﻿using Microsoft.Windows.Storage.Pickers;
+﻿using Microsoft.UI.Xaml.Controls;
+using Microsoft.Windows.Storage.Pickers;
 using Microsoft.WindowsAppSDK.Runtime.Packages;
 using MySql.Data.MySqlClient;
 using MySqlX.XDevAPI;
+using Org.BouncyCastle.Crypto;
+using Org.BouncyCastle.Crypto.Generators;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -24,13 +27,18 @@ namespace TravailDeSession
         ObservableCollection<Client> listeClients;
         ObservableCollection<Employe> listeEmployes;
         ObservableCollection<Projet> listeProjets;
+        List<int> listeIdentifiants;
         static SingletonGeneralUse instance = null;
+        protected string AdminUsername = "Admin";
+        protected string AdminPassword = "root"; // to be hashed later------------------------------------------------------------------------------------------------------------------------------
+        protected bool adminIsAdmin = false;
         private SingletonGeneralUse()
         {
             stringConnectionSql = "Server=cours.cegep3r.info;Database=a2025_420345ri_gr2_2377057-meallan-milot;Uid=2377057;Pwd=2377057;";
             listeClients = new ObservableCollection<Client>();
             listeEmployes = new ObservableCollection<Employe>();
             listeProjets = new ObservableCollection<Projet>();
+            listeIdentifiants = new List<int>();
         }
         //retourne l’instance du singleton
         public static SingletonGeneralUse getInstance()
@@ -147,6 +155,47 @@ namespace TravailDeSession
             {
                 //Coder l'erreure ici
                 Debug.WriteLine("Erreur lors de la recherche du client par son ID");
+                return null;
+            }
+        }
+
+        public List<int> getAllClientId() //charge la liste avec tous les clients
+        {
+            try
+            {
+                //Connection sql
+                using MySqlConnection con = new MySqlConnection(stringConnectionSql);
+                con.Open();
+
+                //Commande sql
+                using MySqlCommand commande = con.CreateCommand();
+                commande.CommandText = "SELECT identifiant FROM Clients";
+                using MySqlDataReader r = commande.ExecuteReader();
+
+                //Lecture et copie des résultats
+                while (r.Read())
+                {
+                    try
+                    {
+                        //Ajout des identifiants à la liste des identifiants
+                        foreach (int id in r)
+                        {
+                            int identifiant = r.GetInt32("identifiant");
+                            listeIdentifiants.Add(identifiant);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine("Erreur lors de la lecture d'un client: " + ex.Message);
+                        return null;
+                    }
+                }
+                return listeIdentifiants;
+            }
+            catch (MySqlException ex)
+            {
+                //Coder l'erreure ici
+                Debug.WriteLine(ex.Message);
                 return null;
             }
         }
@@ -860,6 +909,21 @@ namespace TravailDeSession
             }
         }
 
+        /*-------------------------------------------------------Connections Administrateur-------------------------------------------------------*/
+
+        public bool AdminIsAdmin { get => adminIsAdmin; set => adminIsAdmin = value; }
+
+        public bool ValiderAdmin(string nom, string mdp)
+        {
+            if (nom.Equals(AdminUsername) && mdp.Equals(AdminPassword))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
 
     }

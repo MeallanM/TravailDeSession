@@ -27,5 +27,125 @@ namespace TravailDeSession
         {
             InitializeComponent();
         }
+
+        private void navView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
+        {
+            if (args.InvokedItemContainer is NavigationViewItem item)
+            {
+                switch (item.Tag)
+                {
+                    case "AfficherProjets":
+                        mainFrame.Navigate(typeof(PageAfficherProjets));
+                        break;
+                    case "AjouterProjet":
+                        mainFrame.Navigate(typeof(PageAjouterProjet));
+                        break;
+                    case "ModifierProjet":
+                        mainFrame.Navigate(typeof(PageModifierProjet));
+                        break;
+                    case "AfficherClients":
+                        mainFrame.Navigate(typeof(PageAfficherClients));
+                        break;
+                    case "AjouterClient":
+                        mainFrame.Navigate(typeof(PageAjouterClient));
+                        break;
+                    case "ModifierClient":
+                        mainFrame.Navigate(typeof(PageModifierClient));
+                        break;
+                    case "AfficherEmployes":
+                        mainFrame.Navigate(typeof(PageAfficherEmploye));
+                        break;
+                    case "AjouterEmploye":
+                        mainFrame.Navigate(typeof(PageAjouterEmploye));
+                        break;
+                    case "ModifierEmploye":
+                        mainFrame.Navigate(typeof(PageModifierEmploye));
+                        break;
+                    case "Connection":
+                        ShowLoginDialogAsync();
+                        break;
+                    case "Deconnection":
+                        SingletonGeneralUse.getInstance().AdminIsAdmin = false;
+                        break;
+                    case "Quitter":
+                        Application.Current.Exit();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        private void clickMenuBar(object sender, RoutedEventArgs e)
+        {
+            var item = sender as MenuFlyoutItem;
+            if (item != null)
+            {
+                //Switch sur les options du menu pour gèrer les imports/exports et la fermeture de l'application
+                switch (item.Tag)
+                {
+                    case "ClientImport":
+                        SingletonGeneralUse.getInstance().ImportClientsAsync();
+                        break;
+                    case "EmployeImport":
+                        SingletonGeneralUse.getInstance().ImportEmployesAsync();
+                        break;
+                    case "ProjetImport":
+                        SingletonGeneralUse.getInstance().ImportProjetsAsync();
+                        break;
+                    case "ClientExport":
+                        SingletonGeneralUse.getInstance().ExportClientsAsync();
+                        break;
+                    case "EmployeExport":
+                        SingletonGeneralUse.getInstance().ExportEmployesAsync();
+                        break;
+                    case "ProjetExport":
+                        SingletonGeneralUse.getInstance().ExportProjetsAsync();
+                        break;
+                    case "Quitter":
+                        Application.Current.Exit();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        // Afficher la boîte de dialogue de connexion (LoginDialog.xaml)
+        public async void ShowLoginDialogAsync()
+        {
+            //Création et initialisation de la boîte de dialogue
+            var dialog = new LoginDialog();
+            dialog.XamlRoot = this.Content.XamlRoot;
+            var result = await dialog.ShowAsync();
+
+            //Traitement des informations de connexion
+            if (result == ContentDialogResult.Primary)
+            {
+                string nom = dialog.Username;
+                string mdp = dialog.Password;
+
+                if (SingletonGeneralUse.getInstance().ValiderAdmin(nom, mdp)) // your logic
+                {
+                    // Connection réussie
+                    SingletonGeneralUse.getInstance().AdminIsAdmin = true;
+                }
+                else
+                {
+                    // Connection échouée
+                    ContentDialog error = new ContentDialog
+                    {
+                        Title = "Connection échouée",
+                        Content = "Nom ou mot de passe invalide",
+                        CloseButtonText = "OK",
+                        XamlRoot = this.Content.XamlRoot
+                    };
+
+                    await error.ShowAsync();
+                    return;
+                }
+            }
+
+        }
     }
 }
