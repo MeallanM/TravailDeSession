@@ -92,7 +92,7 @@ namespace TravailDeSession
 
                 //Commande sql
                 using MySqlCommand commande = con.CreateCommand();
-                commande.CommandText = "SELECT * FROM Clients";
+                commande.CommandText = "SELECT * FROM clients";
                 using MySqlDataReader r = commande.ExecuteReader();
 
                 //Lecture et copie des résultats
@@ -133,7 +133,7 @@ namespace TravailDeSession
 
                 //Commande sql
                 using MySqlCommand commande = con.CreateCommand();
-                commande.CommandText = "SELECT * FROM Clients WHERE id = @id";
+                commande.CommandText = "SELECT * FROM clients WHERE id = @id";
                 commande.Parameters.AddWithValue("@id", id);
                 using MySqlDataReader r = commande.ExecuteReader();
 
@@ -169,7 +169,7 @@ namespace TravailDeSession
 
                 //Commande sql
                 using MySqlCommand commande = con.CreateCommand();
-                commande.CommandText = "SELECT identifiant FROM Clients";
+                commande.CommandText = "SELECT identifiant FROM clients";
                 using MySqlDataReader r = commande.ExecuteReader();
 
                 //Lecture et copie des résultats
@@ -327,7 +327,7 @@ namespace TravailDeSession
 
                 //Commande sql
                 using MySqlCommand command = connection.CreateCommand();
-                command.CommandText = "SELECT * FROM Employes";
+                command.CommandText = "SELECT * FROM employes";
                 using MySqlDataReader r = command.ExecuteReader();
 
                 //Lecture et copie des résultats
@@ -503,7 +503,7 @@ namespace TravailDeSession
 
                 //Commande sql
                 using MySqlCommand commande = con.CreateCommand();
-                commande.CommandText = "Select * from Projets";
+                commande.CommandText = "Select * from projets";
                 using MySqlDataReader r = commande.ExecuteReader();
 
                 //Lecture et copie des résultats
