@@ -9,6 +9,8 @@
     mc:Ignorable="d">
 
     <Grid>
-
+        <TextBlock Text="Page Afficher Employe Test" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24"/>
+        <TextBlock x:Name="tbShowEmpl" Text="" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24"/>
+        <Button Content="Test Button" HorizontalAlignment="Left" VerticalAlignment="Top" Click="Button_Click"/>
     </Grid>
 </Page>

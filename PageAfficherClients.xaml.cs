@@ -27,5 +27,11 @@ namespace TravailDeSession
         {
             InitializeComponent();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            int i = SingletonGeneralUse.getInstance().getNombreItemInTable("client");
+            tbShowCli.Text = i.ToString();
+        }
     }
 }
