@@ -41,10 +41,11 @@
         <NavigationView PaneDisplayMode="Left" PaneTitle="Gestion de projets" x:Name="navView" ItemInvoked="navView_ItemInvoked" Grid.Row="1" >
             <NavigationView.MenuItems>
                 <NavigationViewItemHeader Content="Client"/>
-                <NavigationViewItem Content="Afficher les Clients" x:Name="nviShowClients" Icon="Globe" Tag="AfficherClients"/>
-                <NavigationViewItem Content="Ajouter un Client" x:Name="nviAddClient" Icon="Add" Tag="AjouterClient"/>
-                <NavigationViewItem Content="Modifier un Client" x:Name="nviAlterClient" Icon="Refresh" Tag="ModifierClient"/>
+                <NavigationViewItem Content="Clients" x:Name="nviShowClients" Icon="Globe" Tag="AfficherClients"/>
+                <NavigationViewItem Content="Employés" x:Name="nviAddClient" Icon="Add" Tag="AjouterClient"/>
+                <NavigationViewItem Content="Projets" x:Name="nviAlterClient" Icon="Refresh" Tag="ModifierClient"/>
                 <NavigationViewItemSeparator />
+                
                 <NavigationViewItemHeader Content="Employés"/>
                 <NavigationViewItem Content="Afficher les Employés" x:Name="nviShowEmployés" Icon="Globe" Tag="AfficherEmployés"/>
                 <NavigationViewItem Content="Ajouter un Employé" x:Name="nviAddEmployé" Icon="Add" Tag="AjouterEmployé"/>
