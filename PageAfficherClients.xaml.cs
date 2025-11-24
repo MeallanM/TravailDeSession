@@ -77,5 +77,10 @@ namespace TravailDeSession
                 }
             }
         }
+
+        private void AjouterClient_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

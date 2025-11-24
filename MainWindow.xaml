@@ -45,17 +45,6 @@
                 <NavigationViewItem Content="Voir Employés" x:Name="nviAddClient" Icon="Add" Tag="AfficherEmployes"/>
                 <NavigationViewItem Content="Voir Projets" x:Name="nviAlterClient" Icon="Refresh" Tag="AfficherProjets"/>
                 <NavigationViewItemSeparator />
-                
-                <NavigationViewItemHeader Content="Employés"/>
-                <NavigationViewItem Content="Afficher les Employés" x:Name="nviShowEmployés" Icon="Globe" Tag="AfficherEmployes"/>
-                <NavigationViewItem Content="Ajouter un Employé" x:Name="nviAddEmployé" Icon="Add" Tag="AjouterEmploye"/>
-                <NavigationViewItem Content="Modifier un Employé" x:Name="nviAlterEmployé" Icon="Refresh" Tag="ModifierEmploye"/>
-                <NavigationViewItemSeparator />
-                <NavigationViewItemHeader Content="Projet"/>
-                <NavigationViewItem Content="Afficher les Projets" x:Name="nviShowProjets" Icon="Globe" Tag="AfficherProjets"/>
-                <NavigationViewItem Content="Ajouter un Projet" x:Name="nviAddProjet" Icon="Add" Tag="AjouterProjet"/>
-                <NavigationViewItem Content="Modifier un Projet" x:Name="nviAlterProjet" Icon="Refresh" Tag="ModifierProjet"/>
-                <NavigationViewItemSeparator />
             </NavigationView.MenuItems>
 
             <NavigationView.FooterMenuItems>
