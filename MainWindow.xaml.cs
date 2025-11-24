@@ -37,29 +37,11 @@ namespace TravailDeSession
                     case "AfficherProjets":
                         mainFrame.Navigate(typeof(PageAfficherProjets));
                         break;
-                    case "AjouterProjet":
-                        mainFrame.Navigate(typeof(PageAjouterProjet));
-                        break;
-                    case "ModifierProjet":
-                        mainFrame.Navigate(typeof(PageModifierProjet));
-                        break;
                     case "AfficherClients":
                         mainFrame.Navigate(typeof(PageAfficherClients));
                         break;
-                    case "AjouterClient":
-                        mainFrame.Navigate(typeof(PageAjouterClient));
-                        break;
-                    case "ModifierClient":
-                        mainFrame.Navigate(typeof(PageModifierClient));
-                        break;
                     case "AfficherEmployes":
                         mainFrame.Navigate(typeof(PageAfficherEmploye));
-                        break;
-                    case "AjouterEmploye":
-                        mainFrame.Navigate(typeof(PageAjouterEmploye));
-                        break;
-                    case "ModifierEmploye":
-                        mainFrame.Navigate(typeof(PageModifierEmploye));
                         break;
                     case "Connection":
                         ShowLoginDialogAsync();

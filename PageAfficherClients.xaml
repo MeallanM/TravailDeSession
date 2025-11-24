@@ -26,7 +26,15 @@
             </MenuBarItem>
         </MenuBar>
 
+<<<<<<< HEAD
         <ScrollViewer Padding="20" VerticalScrollBarVisibility="Auto" Grid.Row="1">
+=======
+            <!-- Add and Delete Buttons -->
+            <Button Content="Add Client" x:Name="AjouterClient" Click="AjouterClient_Click"/>
+            <Button Content="Delete Client" x:Name="SupprimerClient" Click="SupprimerClient_Click" Margin="10"/>
+        </StackPanel>
+        <ScrollViewer Padding="20" VerticalScrollBarVisibility="Auto">
+>>>>>>> a1ff7ecfea497e6cdd5a478b6463fbe94ee0eddb
             <StackPanel Spacing="30">
                 <TextBlock Text="Liste des Clients" FontSize="24" FontWeight="Bold"/>
                 <GridView ItemsSource="{x:Bind Clients}"
