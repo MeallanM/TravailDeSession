@@ -35,6 +35,18 @@
         </StackPanel>
         <ScrollViewer Padding="20" VerticalScrollBarVisibility="Auto">
 >>>>>>> a1ff7ecfea497e6cdd5a478b6463fbe94ee0eddb
+        <MenuBar Grid.Row="0" HorizontalAlignment="right">
+            <MenuBarItem Title="Ajouter">
+            </MenuBarItem>
+            <MenuBarItem Title="Modifier">
+            </MenuBarItem>
+            <MenuBarItem Title="Autres">
+                <MenuFlyoutItem Text="Quitter" Tag="Quitter" />
+            </MenuBarItem>
+        </MenuBar>
+        <ScrollViewer Padding="20" VerticalScrollBarVisibility="Auto" Grid.Row="1">
+            
+
             <StackPanel Spacing="30">
                 <TextBlock Text="Liste des Clients" FontSize="24" FontWeight="Bold"/>
                 <GridView ItemsSource="{x:Bind Clients}"

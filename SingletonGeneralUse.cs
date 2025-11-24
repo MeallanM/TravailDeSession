@@ -335,20 +335,46 @@ namespace TravailDeSession
                 {
                     try
                     {
+                        string matricule = r.IsDBNull("matricule") ? "" : r.GetString("matricule");
+                        string nom = r.IsDBNull("nom") ? "" : r.GetString("nom");
+                        string prenom = r.IsDBNull("prenom") ? "" : r.GetString("prenom");
 
-                        string matricule = r.GetString("matricule");
-                        string nom = r.GetString("nom");
-                        string prenom = r.GetString("prenom");
-                        DateTime dateNaissance = r.GetDateTime("dateNaissance");
-                        string email = r.GetString("email");
-                        string adresse = r.GetString("adresse");
-                        DateTime dateEmbauche = r.GetDateTime("dateEmbauche");
-                        double tauxHoraire = r.GetDouble("tauxHoraire");
-                        Uri? photoIdentite = new Uri(r.GetString("photoIdentite"));
-                        string statut = r.GetString("statut");
+                        DateTime? dateNaissance = r.IsDBNull("dateNaissance")
+                            ? null
+                            : r.GetDateTime("dateNaissance");
 
-                        //Création et ajout de l'employé
-                        Employe employe = new Employe(matricule, nom, prenom, dateNaissance, email, adresse, dateEmbauche, tauxHoraire, photoIdentite, statut);
+                        string email = r.IsDBNull("email") ? "" : r.GetString("email");
+                        string adresse = r.IsDBNull("adresse") ? "" : r.GetString("adresse");
+
+                        DateTime? dateEmbauche = r.IsDBNull("dateEmbauche")
+                            ? null
+                            : r.GetDateTime("dateEmbauche");
+
+                        double? tauxHoraire = r.IsDBNull("tauxHoraire")
+                            ? null
+                            : r.GetDouble("tauxHoraire");
+
+                        Uri? photoIdentite = r.IsDBNull("photoIdentite")
+                            ? null
+                            : new Uri(r.GetString("photoIdentite"));
+
+                        string statut = r.IsDBNull("statut") ? "" : r.GetString("statut");
+
+                        // If your constructor expects non-null values,
+                        // you need to update the constructor OR pass defaults.
+                        Employe employe = new Employe(
+                            matricule,
+                            nom,
+                            prenom,
+                            dateNaissance ?? DateTime.MinValue,
+                            email,
+                            adresse,
+                            dateEmbauche ?? DateTime.MinValue,
+                            tauxHoraire ?? 0,
+                            photoIdentite,
+                            statut
+                        );
+
                         listeEmployes.Add(employe);
                     }
                     catch (Exception ex)
