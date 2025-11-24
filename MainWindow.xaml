@@ -40,10 +40,10 @@
 
         <NavigationView PaneDisplayMode="Left" PaneTitle="Gestion de projets" x:Name="navView" ItemInvoked="navView_ItemInvoked" Grid.Row="1" >
             <NavigationView.MenuItems>
-                <NavigationViewItemHeader Content="Client"/>
-                <NavigationViewItem Content="Clients" x:Name="nviShowClients" Icon="Globe" Tag="AfficherClients"/>
-                <NavigationViewItem Content="Employés" x:Name="nviAddClient" Icon="Add" Tag="AjouterClient"/>
-                <NavigationViewItem Content="Projets" x:Name="nviAlterClient" Icon="Refresh" Tag="ModifierClient"/>
+                <NavigationViewItemHeader Content="Gestion de projets"/>
+                <NavigationViewItem Content="Voir Clients" x:Name="nviShowClients" Icon="Globe" Tag="AfficherClients"/>
+                <NavigationViewItem Content="Voir Employés" x:Name="nviAddClient" Icon="Add" Tag="AfficherEmployes"/>
+                <NavigationViewItem Content="Voir Projets" x:Name="nviAlterClient" Icon="Refresh" Tag="AfficherProjets"/>
                 <NavigationViewItemSeparator />
                 
                 <NavigationViewItemHeader Content="Employés"/>
