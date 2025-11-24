@@ -15,7 +15,7 @@
 
             <!-- Add and Delete Buttons -->
             <Button Content="Add Client" x:Name="AjouterClient" Click="AjouterClient_Click"/>
-            <Button Content="Delete Client" x:Name="SupprimerClient" Click="DeleteClient_Click" Margin="10"/>
+            <Button Content="Delete Client" x:Name="SupprimerClient" Click="SupprimerClient_Click" Margin="10"/>
         </StackPanel>
         <ScrollViewer Padding="20" VerticalScrollBarVisibility="Auto">
             <StackPanel Spacing="30">
