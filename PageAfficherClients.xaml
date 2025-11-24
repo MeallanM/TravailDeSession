@@ -9,15 +9,24 @@
     mc:Ignorable="d">
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
 
-        <StackPanel>
-            <TextBlock Text="List of Clients" FontSize="20" Margin="20"/>
+        <MenuBar Grid.Row="0" HorizontalAlignment="right">
+            <MenuBarItem Title="Ajouter">
+            </MenuBarItem>
+            <MenuBarItem Title="Modifier">
+            </MenuBarItem>
+            <MenuBarItem Title="Autres">
+                <MenuFlyoutItem Text="Quitter" Tag="Quitter" />
+            </MenuBarItem>
+        </MenuBar>
 
-            <!-- Add and Delete Buttons -->
-            <Button Content="Add Client" x:Name="AjouterClient" Click="AjouterClient_Click"/>
-            <Button Content="Delete Client" x:Name="SupprimerClient" Click="DeleteClient_Click" Margin="10"/>
-        </StackPanel>
-        <ScrollViewer Padding="20" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Padding="20" VerticalScrollBarVisibility="Auto" Grid.Row="1">
             <StackPanel Spacing="30">
                 <TextBlock Text="Liste des Clients" FontSize="24" FontWeight="Bold"/>
                 <GridView ItemsSource="{x:Bind Clients}"
@@ -30,15 +39,21 @@
                             <StackPanel Margin="0,5">
                                 <TextBlock Text="{x:Bind Nom}" FontWeight="Bold"/>
                                 <TextBlock Text="{x:Bind Email}"/>
-                                <Button Content="Afficher" x:Name="btnAfficher"
-                                Click="btnAfficher_Click"
-                                Tag="{x:Bind}" />
-                                <Button Content="Modifier" x:Name="btnModifier"
-                                Click="btnModifier_Click"
-                                Tag="{x:Bind}" />
-                                <Button Content="Supprimer" x:Name="btnSupprimer"
-                                Click="btnSupprimer_Click"
-                                Tag="{x:Bind}" />
+                                <Border x:Name="BtnLikeText"
+                                Width="140"
+                                Height="40"
+                                Background="#0B99B2"
+                                CornerRadius="6"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+
+                                <TextBlock Text="Afficher"
+                                Foreground="White"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontWeight="Bold"
+                                FontSize="14"/>
+                                </Border>
                             </StackPanel>
                         </DataTemplate>
                     </GridView.ItemTemplate>

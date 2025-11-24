@@ -82,5 +82,10 @@ namespace TravailDeSession
         {
 
         }
+
+        private void SupprimerClient_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
