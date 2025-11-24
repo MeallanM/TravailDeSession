@@ -9,6 +9,32 @@
     mc:Ignorable="d">
 
     <Grid>
+        <TextBlock Text="Liste des Employés" FontSize="24" FontWeight="Bold"/>
+        <ListView ItemsSource="{x:Bind Employes}"
+IsItemClickEnabled="True"
+  ItemClick="lvAfficher_ItemClick"
+  Height="300"
+x:Name="lvbShowEmployes">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="local:Employe">
+                    <StackPanel Margin="0,5">
+                        <TextBlock Text="{x:Bind Nom}" FontWeight="Bold"/>
+                        <TextBlock Text="{x:Bind Prenom}" FontWeight="Bold"/>
+                        <TextBlock Text="{x:Bind Email}"/>
+                        <Image Source="{x:Bind PhotoIdentiteImage}" Height="80"/>
+                        <Button Content="Afficher" x:Name="btnAfficher"
+                          Click="btnAfficher_Click"
+                          Tag="{x:Bind}" />
+                        <Button Content="Modifier" x:Name="btnModifier"
+                          Click="btnModifier_Click"
+                          Tag="{x:Bind}" />
+                        <Button Content="Supprimer" x:Name="btnSupprimer"
+                          Click="btnSupprimer_Click"
+                          Tag="{x:Bind}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
 
     </Grid>
 </Page>

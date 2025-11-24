@@ -108,7 +108,7 @@ namespace TravailDeSession
 
                         //Création et ajout du client
                         Client client = new Client(identifiant, nom, adresse, telephone, email);
-                        listeClients.Add(client);
+                        ListeClients.Add(client);
                     }
                     catch (Exception ex)
                     {
@@ -344,7 +344,7 @@ namespace TravailDeSession
                         string adresse = r.GetString("adresse");
                         DateTime dateEmbauche = r.GetDateTime("dateEmbauche");
                         double tauxHoraire = r.GetDouble("tauxHoraire");
-                        Uri photoIdentite = new Uri(r.GetString("photoIdentite"));
+                        Uri? photoIdentite = new Uri(r.GetString("photoIdentite"));
                         string statut = r.GetString("statut");
 
                         //Création et ajout de l'employé

@@ -47,9 +47,9 @@
                 <NavigationViewItemSeparator />
                 
                 <NavigationViewItemHeader Content="Employés"/>
-                <NavigationViewItem Content="Afficher les Employés" x:Name="nviShowEmployés" Icon="Globe" Tag="AfficherEmployés"/>
-                <NavigationViewItem Content="Ajouter un Employé" x:Name="nviAddEmployé" Icon="Add" Tag="AjouterEmployé"/>
-                <NavigationViewItem Content="Modifier un Employé" x:Name="nviAlterEmployé" Icon="Refresh" Tag="ModifierEmployé"/>
+                <NavigationViewItem Content="Afficher les Employés" x:Name="nviShowEmployés" Icon="Globe" Tag="AfficherEmployes"/>
+                <NavigationViewItem Content="Ajouter un Employé" x:Name="nviAddEmployé" Icon="Add" Tag="AjouterEmploye"/>
+                <NavigationViewItem Content="Modifier un Employé" x:Name="nviAlterEmployé" Icon="Refresh" Tag="ModifierEmploye"/>
                 <NavigationViewItemSeparator />
                 <NavigationViewItemHeader Content="Projet"/>
                 <NavigationViewItem Content="Afficher les Projets" x:Name="nviShowProjets" Icon="Globe" Tag="AfficherProjets"/>

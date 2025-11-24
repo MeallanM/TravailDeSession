@@ -32,19 +32,7 @@ namespace TravailDeSession
             Email = email;
         }
 
-        public int Identifiant { get => identifiant; set 
-            {
-                foreach(int id in SingletonGeneralUse.getInstance().getAllClientId())
-                {
-                    if(id == Identifiant)
-                    {
-                        Random randomId = new Random();
-                        Identifiant = randomId.Next(100, 999);
-                    }
-                    identifiant = value;
-                }
-            }
-        }
+        public int Identifiant { get => identifiant; set => identifiant = value;}
         public string Nom { get => nom; set 
             {
                 if (string.IsNullOrWhiteSpace(value))

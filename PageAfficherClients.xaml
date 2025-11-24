@@ -9,6 +9,33 @@
     mc:Ignorable="d">
 
     <Grid>
-
+        <ScrollViewer Padding="20" VerticalScrollBarVisibility="Auto">
+            <StackPanel Spacing="30">
+                <TextBlock Text="Liste des Clients" FontSize="24" FontWeight="Bold"/>
+                <GridView ItemsSource="{x:Bind Clients}"
+              IsItemClickEnabled="True"
+        ItemClick="lvAfficher_ItemClick"
+        Height="300"
+              x:Name="lvbShowClients">
+                    <GridView.ItemTemplate>
+                        <DataTemplate x:DataType="local:Client">
+                            <StackPanel Margin="0,5">
+                                <TextBlock Text="{x:Bind Nom}" FontWeight="Bold"/>
+                                <TextBlock Text="{x:Bind Email}"/>
+                                <Button Content="Afficher" x:Name="btnAfficher"
+                                Click="btnAfficher_Click"
+                                Tag="{x:Bind}" />
+                                <Button Content="Modifier" x:Name="btnModifier"
+                                Click="btnModifier_Click"
+                                Tag="{x:Bind}" />
+                                <Button Content="Supprimer" x:Name="btnSupprimer"
+                                Click="btnSupprimer_Click"
+                                Tag="{x:Bind}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
+                </GridView>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>
