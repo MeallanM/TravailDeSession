@@ -16,18 +16,39 @@
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
-        <MenuBar Grid.Row="0" HorizontalAlignment="right">
-            <MenuBarItem Title="Ajouter">
-            </MenuBarItem>
-            <MenuBarItem Title="Modifier">
-            </MenuBarItem>
-            <MenuBarItem Title="Autres">
-                <MenuFlyoutItem Text="Quitter" Tag="Quitter" />
-            </MenuBarItem>
-        </MenuBar>
+        <StackPanel Orientation="Horizontal" Spacing="12">
+            <!-- ADD BUTTON -->
+            <Button x:Name="btnAjoutClient"
+            Padding="16,10"
+            CornerRadius="12"
+            Background="#4CAF50"
+            Foreground="White"
+            Click="btnAjoutClient_Click">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="6">
+                    <FontIcon Glyph="&#xE710;" />
+                    <!-- + icon -->
+                    <TextBlock Text="Add" />
+                </StackPanel>
+            </Button>
+
+            <!-- MODIFY BUTTON -->
+            <Button x:Name="btnModClient"
+            Padding="16,10"
+            CornerRadius="12"
+            Background="#2196F3"
+            Foreground="White"
+            Click="btnModClient_Click">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="6">
+                    <FontIcon Glyph="&#xE70F;" />
+                    <!-- edit/pencil icon -->
+                    <TextBlock Text="Modify" />
+                </StackPanel>
+            </Button>
+        </StackPanel>
+        
         <ScrollViewer Padding="20" VerticalScrollBarVisibility="Auto" Grid.Row="1">
             <StackPanel Spacing="30">
-                <TextBlock Text="Liste des Clients" FontSize="24" FontWeight="Bold"/>
+                <TextBlock Text="Liste des Clients" x:Name="tbTitrePageAfficher" FontSize="24" FontWeight="Bold"/>
                 <GridView ItemsSource="{x:Bind Clients}"
               IsItemClickEnabled="True"
         ItemClick="lvAfficher_ItemClick"

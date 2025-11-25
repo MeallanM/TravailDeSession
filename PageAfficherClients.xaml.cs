@@ -26,6 +26,7 @@ namespace TravailDeSession
     public sealed partial class PageAfficherClients : Page
     {
         ObservableCollection<Client> Clients;
+        bool AwaitingClick = false;
         public PageAfficherClients()
         {
             InitializeComponent();
@@ -35,28 +36,25 @@ namespace TravailDeSession
 
         private void lvAfficher_ItemClick(object sender, ItemClickEventArgs e)
         {
+            var selectedClient = e.ClickedItem as Client;
             var frame = Frame ?? ((Frame)Microsoft.UI.Xaml.Window.Current.Content);
-
-            if (e.ClickedItem is Client cli)
-            {
-                frame.Navigate(typeof(PageModifierClient), cli);
-            }
+                if (selectedClient is Client cli)
+                {
+                    frame.Navigate(typeof(PageDetailsClient), cli);
+                }
         }
-        private void btnAfficher_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button btn && btn.Tag is Client cli)
-            {
-                Frame.Navigate(typeof(/*AJouter le whatever qui gère sa. Je mets dequoi temporaire*/PageAfficherClients), cli);
-            }
-        }
-        private void btnModifier_Click(object sender, RoutedEventArgs e)
+        private void btnAjoutClient_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button btn2 && btn2.Tag is Client cli)
             {
-                Frame.Navigate(typeof(/*AJouter le whatever qui gère sa. Je mets dequoi temporaire*/PageAfficherClients), cli);
+                Frame.Navigate(typeof(PageAjouterClient), cli);
             }
         }
-        private async void btnSupprimer_Click(object sender, RoutedEventArgs e)
+        private void btnModClient_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+         private async void btnSupprimer_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button btn)
             {
@@ -76,16 +74,6 @@ namespace TravailDeSession
                         SingletonGeneralUse.getInstance().SupprimerClient(prod);
                 }
             }
-        }
-
-        private void AjouterClient_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void SupprimerClient_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }
