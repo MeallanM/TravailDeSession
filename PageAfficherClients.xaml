@@ -17,7 +17,6 @@
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal" Spacing="12">
-            <!-- ADD BUTTON -->
             <Button x:Name="btnAjoutClient"
             Padding="16,10"
             CornerRadius="12"
@@ -26,22 +25,7 @@
             Click="btnAjoutClient_Click">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="6">
                     <FontIcon Glyph="&#xE710;" />
-                    <!-- + icon -->
                     <TextBlock Text="Add" />
-                </StackPanel>
-            </Button>
-
-            <!-- MODIFY BUTTON -->
-            <Button x:Name="btnModClient"
-            Padding="16,10"
-            CornerRadius="12"
-            Background="#2196F3"
-            Foreground="White"
-            Click="btnModClient_Click">
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="6">
-                    <FontIcon Glyph="&#xE70F;" />
-                    <!-- edit/pencil icon -->
-                    <TextBlock Text="Modify" />
                 </StackPanel>
             </Button>
         </StackPanel>
