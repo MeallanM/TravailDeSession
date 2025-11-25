@@ -34,7 +34,7 @@ namespace TravailDeSession
         protected bool adminIsAdmin = false;
         private SingletonGeneralUse()
         {
-            stringConnectionSql = "Server=cours.cegep3r.info;Database=a2025_420345ri_gr2_2377057-meallan-milot;Uid=2377057;Pwd=2377057;";
+            stringConnectionSql = "Server=cours.cegep3r.info;Database=a2025_420335-345ri_greq7;Uid=2377057;Pwd=2377057;";
             listeClients = new ObservableCollection<Client>();
             listeEmployes = new ObservableCollection<Employe>();
             listeProjets = new ObservableCollection<Projet>();
@@ -92,7 +92,7 @@ namespace TravailDeSession
 
                 //Commande sql
                 using MySqlCommand commande = con.CreateCommand();
-                commande.CommandText = "SELECT * FROM clients";
+                commande.CommandText = "SELECT * FROM VAClient";
                 using MySqlDataReader r = commande.ExecuteReader();
 
                 //Lecture et copie des résultats
@@ -100,7 +100,7 @@ namespace TravailDeSession
                 {
                     try
                     {
-                        int identifiant = r.GetInt32("identifiant");
+                        int identifiant = r.GetInt32("id");
                         string nom = r.GetString("nom");
                         string adresse = r.GetString("adresse");
                         string telephone = r.GetString("telephone");
@@ -200,7 +200,7 @@ namespace TravailDeSession
             }
         }
 
-        public void AjouterClient(Client c)
+        public async void AjouterClient(Client c)
         {
             try
             {
@@ -208,13 +208,11 @@ namespace TravailDeSession
                 MySqlConnection con = new MySqlConnection(stringConnectionSql);
 
                 //Commande sql
-                MySqlCommand commandeSql = new MySqlCommand();
-                commandeSql.Connection = con;
-                commandeSql.CommandText = @"INSERT INTO clients (identifiant, nom, adresse, telephone, email) 
-                                            VALUES (@identifiant, @nom, @adresse, @telephone, @email)";
+                MySqlCommand commandeSql = new MySqlCommand("ProcNouvClient", con);
+                commandeSql.CommandType = CommandType.StoredProcedure;
 
                 //Ajout des paramètres
-                commandeSql.Parameters.AddWithValue("@identifiant", c.Identifiant);
+                commandeSql.Parameters.AddWithValue("@id", c.Identifiant);
                 commandeSql.Parameters.AddWithValue("@nom", c.Nom);
                 commandeSql.Parameters.AddWithValue("@adresse", c.Adresse);
                 commandeSql.Parameters.AddWithValue("@telephone", c.Telephone);
@@ -222,17 +220,8 @@ namespace TravailDeSession
 
                 //Début traitement SQL
                 commandeSql.Prepare();
-                con.Open();
-                int i = commandeSql.ExecuteNonQuery();
-
-                //Vérification de l'ajout
-                if (i > 0)
-                {
-                    Debug.WriteLine($"Client #{c.Identifiant} ({c.Nom}) ajouté avec succès!");
-                    getAllClients();
-                }
-                else
-                    Debug.WriteLine($"Erreur d'ajout du client (AjouterClient())");
+                await con.OpenAsync();
+                await commandeSql.ExecuteNonQueryAsync();
             }
             catch (MySqlException ex)
             {

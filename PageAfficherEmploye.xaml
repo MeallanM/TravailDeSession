@@ -9,6 +9,25 @@
     mc:Ignorable="d">
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        
+        <StackPanel HorizontalAlignment="Right" Spacing="12" Grid.Row="0">
+            <Button x:Name="btnAjouterEmploye" Click="btnAjouterEmploye_Click"
+            Padding="16,10"
+            CornerRadius="12"
+            Background="#4CAF50"
+            Foreground="White">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="6">
+                    <FontIcon Glyph="&#xE710;" />
+                    <TextBlock Text="Add" />
+                </StackPanel>
+            </Button>
+        </StackPanel>
         <TextBlock Text="Liste des Employés" FontSize="24" FontWeight="Bold"/>
         <ListView ItemsSource="{x:Bind Employes}"
 IsItemClickEnabled="True"
@@ -22,15 +41,6 @@ x:Name="lvbShowEmployes">
                         <TextBlock Text="{x:Bind Prenom}" FontWeight="Bold"/>
                         <TextBlock Text="{x:Bind Email}"/>
                         <Image Source="{x:Bind PhotoIdentiteImage}" Height="80"/>
-                        <Button Content="Afficher" x:Name="btnAfficher"
-                          Click="btnAfficher_Click"
-                          Tag="{x:Bind}" />
-                        <Button Content="Modifier" x:Name="btnModifier"
-                          Click="btnModifier_Click"
-                          Tag="{x:Bind}" />
-                        <Button Content="Supprimer" x:Name="btnSupprimer"
-                          Click="btnSupprimer_Click"
-                          Tag="{x:Bind}" />
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
