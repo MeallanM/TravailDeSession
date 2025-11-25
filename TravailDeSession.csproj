@@ -54,11 +54,10 @@
     <PackageReference Include="MySql.Data" Version="9.5.0" />
   </ItemGroup>
   <ItemGroup>
-<<<<<<< Updated upstream
     <Page Update="PageDetailsClient.xaml">
-=======
+	<Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="PageDetailsEmploye.xaml">
->>>>>>> Stashed changes
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
