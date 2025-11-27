@@ -9,6 +9,128 @@
     mc:Ignorable="d">
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
 
+        <StackPanel Spacing="12" Grid.Row="0" Grid.Column="1">
+            <Button x:Name="btnAjouterProjet" Click="btnAjouterProjet_Click"
+     Padding="16,10"
+     CornerRadius="12"
+     Background="#4CAF50"
+     Foreground="White">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="6">
+                    <FontIcon Glyph="&#xE710;" />
+                    <TextBlock Text="Add" />
+                </StackPanel>
+            </Button>
+        </StackPanel>
+
+        <ScrollViewer Padding="20" VerticalScrollBarVisibility="Auto">
+            <StackPanel Spacing="30">
+                <TextBlock Text="Liste des Projets"
+                   HorizontalAlignment="Center"
+                   x:Name="tbTitrePageAfficherProjets"
+                   FontSize="24"
+                   FontWeight="Bold"
+                   Foreground="White"/>
+                <GridView ItemsSource="{x:Bind Projets}"
+                  IsItemClickEnabled="True"
+                  ItemClick="lvAfficher_ItemClick"
+                  HorizontalAlignment="Center"
+                  x:Name="lvbShowProjets"
+                  SelectionMode="None">
+                    <GridView.ItemTemplate>
+                        <DataTemplate x:DataType="local:Projet">
+                            <Border Width="200"
+                            Padding="10"
+                            Margin="5"
+                            Background="#1E1E1E"
+                            CornerRadius="10"
+                            BorderBrush="#333"
+                            BorderThickness="1">
+                                <StackPanel Spacing="6" HorizontalAlignment="Center">
+                                    <TextBlock Text="{x:Bind NoProjet}" 
+                                       FontWeight="Bold"
+                                       FontSize="14"
+                                       Foreground="White"
+                                       TextWrapping="NoWrap"
+                                       IsTextSelectionEnabled="True"
+                                       HorizontalAlignment="Center"/>
+                                    <TextBlock Text="{x:Bind Titre}" 
+                                       FontWeight="SemiBold"
+                                       FontSize="12"
+                                       Foreground="LightGray"
+                                       TextWrapping="NoWrap"
+                                       IsTextSelectionEnabled="True"
+                                       HorizontalAlignment="Center"/>
+                                    <TextBlock Text="{x:Bind DateDebut}"
+                                       FontSize="12"
+                                       Foreground="LightGray"
+                                       HorizontalAlignment="Center"/>
+                                    <TextBlock Text="{x:Bind Client.Nom}"
+                                       FontSize="12"
+                                       Foreground="LightGray"
+                                       TextWrapping="NoWrap"
+                                       IsTextSelectionEnabled="True"
+                                       HorizontalAlignment="Center"/>
+                                    <TextBlock Text="{x:Bind Budget}"
+                                       FontSize="12"
+                                       Foreground="LightGray"
+                                       HorizontalAlignment="Center"/>
+                                    <TextBlock Text="{x:Bind NombreEmployesMax}"
+                                       FontSize="12"
+                                       Foreground="LightGray"
+                                       HorizontalAlignment="Center"/>
+                                    <TextBlock Text="{x:Bind TotalSalaireDu}"
+                                       FontSize="12"
+                                       Foreground="LightGray"
+                                       HorizontalAlignment="Center"/>
+                                    <TextBlock Text="{x:Bind Statut}"
+                                       FontSize="12"
+                                       Foreground="White"
+                                       FontWeight="Bold"
+                                       HorizontalAlignment="Center"/>
+                                    <Border Width="160"
+                                    Height="50"
+                                    CornerRadius="6"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center">
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="CommonStates">
+                                                <VisualState x:Name="Normal"/>
+                                                <VisualState x:Name="PointerOver">
+                                                    <Storyboard>
+                                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="BtnBorderProjet">
+                                                            <DiscreteObjectKeyFrame KeyTime="0" Value="#0D7A8C"/>
+                                                        </ObjectAnimationUsingKeyFrames>
+                                                    </Storyboard>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                        <Border x:Name="BtnBorderProjet"
+                                        Background="#0B99B2"
+                                        CornerRadius="6">
+                                            <TextBlock Text="Afficher&#x0a;Modifier"
+                                               Foreground="White"
+                                               FontWeight="Bold"
+                                               FontSize="14"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               TextAlignment="Center"/>
+                                        </Border>
+                                    </Border>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
+                </GridView>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>

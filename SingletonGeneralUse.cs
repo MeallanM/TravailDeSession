@@ -123,42 +123,51 @@ namespace TravailDeSession
             }
         }
 
-        public Client? getClientWithId(int id) //charge la liste avec tous les clients
+        public async Task<Client?> getClientWithId(int id) // charge la liste avec tous les clients
         {
             try
             {
-                //Connection sql
-                using MySqlConnection con = new MySqlConnection(stringConnectionSql);
-                con.Open();
+                // Connection sql
+                await using MySqlConnection con = new MySqlConnection(stringConnectionSql);
+                await con.OpenAsync();
 
-                //Commande sql
-                using MySqlCommand commande = con.CreateCommand();
-                commande.CommandText = "SELECT * FROM clients WHERE id = @id";
+                // Commande sql
+                await using MySqlCommand commande = con.CreateCommand();
+                commande.CommandText = "FuncTrouverClientParId";
+                commande.CommandType = CommandType.StoredProcedure;
+
+                // Ajout des paramètres
                 commande.Parameters.AddWithValue("@id", id);
-                using MySqlDataReader r = commande.ExecuteReader();
 
-                //Lecture et copie des résultats
-                if (r.Read())
+                // Lecture des résultats
+                using MySqlDataReader r = (MySqlDataReader)await commande.ExecuteReaderAsync();
+
+                if (await r.ReadAsync())
                 {
-                    int identifiant = r.GetInt32("identifiant");
-                    string nom = r.GetString("nom");
-                    string adresse = r.GetString("adresse");
-                    string telephone = r.GetString("telephone");
-                    string email = r.GetString("email");
+                    int identifiant = r.GetInt32("id"); // Make sure this matches your DB column
+                    string nom = r.IsDBNull("nom") ? "" : r.GetString("nom");
+                    string adresse = r.IsDBNull("adresse") ? "" : r.GetString("adresse");
+                    string telephone = r.IsDBNull("telephone") ? "" : r.GetString("telephone");
+                    string email = r.IsDBNull("email") ? "" : r.GetString("email");
 
-                    //Retour du client recherché
+                    // Retour du client recherché
                     return new Client(identifiant, nom, adresse, telephone, email);
                 }
+
                 return null;
             }
             catch (MySqlException ex)
             {
-                //Coder l'erreure ici
-                Debug.WriteLine("Erreur lors de la recherche du client par son ID");
+                // Coder l'erreur ici
+                Debug.WriteLine("Erreur MySQL lors de la recherche du client par son ID: " + ex.Message);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Erreur générale: " + ex.Message);
                 return null;
             }
         }
-
         public List<int> getAllClientId() //charge la liste avec tous les clients
         {
             try
@@ -199,7 +208,6 @@ namespace TravailDeSession
                 return null;
             }
         }
-
         public async void AjouterClient(Client c)
         {
             try
@@ -264,7 +272,6 @@ namespace TravailDeSession
                 Debug.WriteLine($"Erreur dans la modification du client {c.Identifiant} ({c.Nom})");
             }
         }
-
         public void SupprimerClient(Client c)
         {
             try
@@ -312,7 +319,7 @@ namespace TravailDeSession
 
                 //Commande sql
                 using MySqlCommand command = connection.CreateCommand();
-                command.CommandText = "SELECT * FROM employes";
+                command.CommandText = "SELECT * FROM vaemployes";
                 using MySqlDataReader r = command.ExecuteReader();
 
                 //Lecture et copie des résultats
@@ -323,43 +330,16 @@ namespace TravailDeSession
                         string matricule = r.IsDBNull("matricule") ? "" : r.GetString("matricule");
                         string nom = r.IsDBNull("nom") ? "" : r.GetString("nom");
                         string prenom = r.IsDBNull("prenom") ? "" : r.GetString("prenom");
-
-                        DateTime? dateNaissance = r.IsDBNull("dateNaissance")
-                            ? null
-                            : r.GetDateTime("dateNaissance");
-
+                        DateTime? dateNaissance = r.IsDBNull("date_naissance") ? null : r.GetDateTime("date_naissance");
                         string email = r.IsDBNull("email") ? "" : r.GetString("email");
                         string adresse = r.IsDBNull("adresse") ? "" : r.GetString("adresse");
-
-                        DateTime? dateEmbauche = r.IsDBNull("dateEmbauche")
-                            ? null
-                            : r.GetDateTime("dateEmbauche");
-
-                        double? tauxHoraire = r.IsDBNull("tauxHoraire")
-                            ? null
-                            : r.GetDouble("tauxHoraire");
-
-                        Uri? photoIdentite = r.IsDBNull("photoIdentite")
-                            ? null
-                            : new Uri(r.GetString("photoIdentite"));
-
+                        DateTime? dateEmbauche = r.IsDBNull("date_embauche") ? null : r.GetDateTime("date_embauche");
+                        double? tauxHoraire = r.IsDBNull("taux_horaire") ? null : r.GetDouble("taux_horaire");
+                        Uri? photoIdentite = r.IsDBNull("photo_url") ? null : new Uri(r.GetString("photo_url"));
                         string statut = r.IsDBNull("statut") ? "" : r.GetString("statut");
 
-                        // If your constructor expects non-null values,
-                        // you need to update the constructor OR pass defaults.
-                        Employe employe = new Employe(
-                            matricule,
-                            nom,
-                            prenom,
-                            dateNaissance ?? DateTime.MinValue,
-                            email,
-                            adresse,
-                            dateEmbauche ?? DateTime.MinValue,
-                            tauxHoraire ?? 0,
-                            photoIdentite,
-                            statut
-                        );
-
+                        Employe employe = new Employe(matricule, nom, prenom, dateNaissance ?? DateTime.MinValue, email, adresse, 
+                                                      dateEmbauche ?? DateTime.MinValue, tauxHoraire ?? 0, photoIdentite, statut);
                         listeEmployes.Add(employe);
                     }
                     catch (Exception ex)
@@ -383,22 +363,19 @@ namespace TravailDeSession
                 MySqlConnection con = new MySqlConnection(stringConnectionSql);
 
                 //Commande sql
-                MySqlCommand commandeSql = new MySqlCommand();
-                commandeSql.Connection = con;
-                commandeSql.CommandText = @"INSERT INTO employes (matricule, nom, prenom, dateNaissance, email, adresse, dateEmbauche, tauxHoraire, photoIdentite, statut)
-                                        VALUES (@matricule, @nom, @prenom, @dateNaissance, @email, @adresse, @dateEmbauche, @tauxHoraire, @photoIdentite, @statut)";
+                MySqlCommand commandeSql = new MySqlCommand("ProcNouvEmployes", con);
 
                 //Ajout des paramètres
                 commandeSql.Parameters.AddWithValue("@matricule", e.Matricule);
-                commandeSql.Parameters.AddWithValue("@nom", e.Nom);
-                commandeSql.Parameters.AddWithValue("@prenom", e.Prenom);
-                commandeSql.Parameters.AddWithValue("@dateNaissance", e.DateNaissance);
-                commandeSql.Parameters.AddWithValue("@email", e.Email);
-                commandeSql.Parameters.AddWithValue("@adresse", e.Adresse);
-                commandeSql.Parameters.AddWithValue("@dateEmbauche", e.DateEmbauche);
-                commandeSql.Parameters.AddWithValue("@tauxHoraire", e.TauxHoraire);
-                commandeSql.Parameters.AddWithValue("@photoIdentite", e.PhotoIdentite.ToString());
-                commandeSql.Parameters.AddWithValue("@statut", e.Statut);
+                commandeSql.Parameters.AddWithValue("@p_nom", e.Nom);
+                commandeSql.Parameters.AddWithValue("@p_prenom", e.Prenom);
+                commandeSql.Parameters.AddWithValue("@p_date_naissance", e.DateNaissance);
+                commandeSql.Parameters.AddWithValue("@p_email", e.Email);
+                commandeSql.Parameters.AddWithValue("@p_adresse", e.Adresse);
+                commandeSql.Parameters.AddWithValue("@p_date_embauche", e.DateEmbauche);
+                commandeSql.Parameters.AddWithValue("@p_taux_horaire", e.TauxHoraire);
+                commandeSql.Parameters.AddWithValue("@p_photo_url", e.PhotoIdentite.ToString());
+                commandeSql.Parameters.AddWithValue("@p_statut", e.Statut);
 
                 //Début traitement SQL
                 commandeSql.Prepare();
@@ -428,23 +405,19 @@ namespace TravailDeSession
                 MySqlConnection con = new MySqlConnection(stringConnectionSql);
 
                 //Commande sql
-                MySqlCommand commandeSql = new MySqlCommand();
-                commandeSql.Connection = con;
-                commandeSql.CommandText = @"UPDATE employes SET nom = @nom, prenom = @prenom, dateNaissance = @dateNaissance, email = @email,
-                                        adresse = @adresse, dateEmbauche = @dateEmbauche, tauxHoraire = @tauxHoraire, photoIdentite = @photoIdentite,
-                                        statut = @statut WHERE matricule = @matricule";
+                MySqlCommand commandeSql = new MySqlCommand("ProcModifEmployes", con);
 
                 //Ajout des paramètres
-                commandeSql.Parameters.AddWithValue("@nom", e.Nom);
-                commandeSql.Parameters.AddWithValue("@prenom", e.Prenom);
-                commandeSql.Parameters.AddWithValue("@dateNaissance", e.DateNaissance);
-                commandeSql.Parameters.AddWithValue("@email", e.Email);
-                commandeSql.Parameters.AddWithValue("@adresse", e.Adresse);
-                commandeSql.Parameters.AddWithValue("@dateEmbauche", e.DateEmbauche);
-                commandeSql.Parameters.AddWithValue("@tauxHoraire", e.TauxHoraire);
-                commandeSql.Parameters.AddWithValue("@photoIdentite", e.PhotoIdentite.ToString());
-                commandeSql.Parameters.AddWithValue("@statut", e.Statut);
-                commandeSql.Parameters.AddWithValue("@matricule", e.Matricule);
+                commandeSql.Parameters.AddWithValue("@p_matricule", e.Matricule);
+                commandeSql.Parameters.AddWithValue("@p_nom", e.Nom);
+                commandeSql.Parameters.AddWithValue("@p_prenom", e.Prenom);
+                commandeSql.Parameters.AddWithValue("@p_date_naissance", e.DateNaissance);
+                commandeSql.Parameters.AddWithValue("@p_email", e.Email);
+                commandeSql.Parameters.AddWithValue("@p_adresse", e.Adresse);
+                commandeSql.Parameters.AddWithValue("@p_date_embauche", e.DateEmbauche);
+                commandeSql.Parameters.AddWithValue("@p_taux_horaire", e.TauxHoraire);
+                commandeSql.Parameters.AddWithValue("@p_photo_url", e.PhotoIdentite.ToString());
+                commandeSql.Parameters.AddWithValue("@p_statut", e.Statut);
 
                 //Début traitement SQL
                 commandeSql.Prepare();
@@ -474,12 +447,10 @@ namespace TravailDeSession
                 MySqlConnection con = new MySqlConnection(stringConnectionSql);
 
                 //Commande sql
-                MySqlCommand commandeSql = new MySqlCommand();
-                commandeSql.Connection = con;
-                commandeSql.CommandText = @"DELETE FROM employes WHERE matricule = @matricule";
+                MySqlCommand commandeSql = new MySqlCommand("ProcDeleteEmployes", con);
 
                 //Ajout des paramètres
-                commandeSql.Parameters.AddWithValue("@matricule", e.Matricule);
+                commandeSql.Parameters.AddWithValue("@p_matricule", e.Matricule);
 
                 //Début traitement SQL
                 commandeSql.Prepare();
@@ -503,7 +474,7 @@ namespace TravailDeSession
 
         /*-------------------------------------------------------Gestion des Projets-------------------------------------------------------*/
 
-        public void getAllProjets() //charge la liste avec tous les clients
+        public async void getAllProjets() //charge la liste avec tous les clients
         {
             ListeProjets.Clear(); //permet de vider la liste avant de la recharger
             try
@@ -514,21 +485,21 @@ namespace TravailDeSession
 
                 //Commande sql
                 using MySqlCommand commande = con.CreateCommand();
-                commande.CommandText = "Select * from projets";
+                commande.CommandText = "Select * from vaprojet";
                 using MySqlDataReader r = commande.ExecuteReader();
 
                 //Lecture et copie des résultats
                 while (r.Read())
                 {
-                    string noProjet = r.GetString("noProjet");
+                    string noProjet = r.GetString("numero_projet");
                     string titre = r.GetString("titre");
-                    DateTime dateDebut = r.GetDateTime("dateDebut");
+                    DateTime dateDebut = r.GetDateTime("date_debut");
                     string description = r.GetString("description");
                     double budget = r.GetDouble("budget");
-                    int nombreEmployesMax = r.GetInt32("nombreEmployesMax");
-                    double totalSalaireDu = r.GetDouble("totalSalaireDu");
+                    int nombreEmployesMax = r.GetInt32("nb_employes_requis");
+                    double totalSalaireDu = r.GetDouble("total_salaires");
                     string statut = r.GetString("statut");
-                    Client? client = getClientWithId(r.GetInt32("client"));
+                    Client? client = await getClientWithId(r.GetInt32("client_id"));
 
                     //Création et ajout du projet dans la liste du singleton
                     Projet projet = new Projet(noProjet, titre, dateDebut, description, budget, nombreEmployesMax, totalSalaireDu, null, statut);
@@ -550,21 +521,17 @@ namespace TravailDeSession
                 MySqlConnection con = new MySqlConnection(stringConnectionSql);
 
                 //Commande sql
-                MySqlCommand commandeSql = new MySqlCommand();
-                commandeSql.Connection = con;
-                commandeSql.CommandText = @"INSERT INTO projets (noProjet, titre, dateDebut, description, budget, nombreEmployesMax, totalSalaireDu, clientId, statut)
-                                            VALUES (@noProjet, @titre, @dateDebut, @description, @budget, @nombreEmployesMax, @totalSalaireDu, @clientId, @statut)";
+                MySqlCommand commandeSql = new MySqlCommand("ProcNouvProjet", con);
 
                 //Ajout des paramètres
-                commandeSql.Parameters.AddWithValue("@noProjet", p.NoProjet);
-                commandeSql.Parameters.AddWithValue("@titre", p.Titre);
-                commandeSql.Parameters.AddWithValue("@dateDebut", p.DateDebut);
-                commandeSql.Parameters.AddWithValue("@description", p.Description);
-                commandeSql.Parameters.AddWithValue("@budget", p.Budget);
-                commandeSql.Parameters.AddWithValue("@nombreEmployesMax", p.NombreEmployesMax);
-                commandeSql.Parameters.AddWithValue("@totalSalaireDu", p.TotalSalaireDu);
-                commandeSql.Parameters.AddWithValue("@clientId", p.Client.Identifiant); // assuming Client has Identifiant
-                commandeSql.Parameters.AddWithValue("@statut", p.Statut);
+                commandeSql.Parameters.AddWithValue("@p_titre", p.Titre);
+                commandeSql.Parameters.AddWithValue("@p_date_debut", p.DateDebut);
+                commandeSql.Parameters.AddWithValue("@p_description", p.Description);
+                commandeSql.Parameters.AddWithValue("@p_budget", p.Budget);
+                commandeSql.Parameters.AddWithValue("@p_nb_employes_requis", p.NombreEmployesMax);
+                commandeSql.Parameters.AddWithValue("@p_total_salaires", p.TotalSalaireDu);
+                commandeSql.Parameters.AddWithValue("@p_client_id", p.Client.Identifiant);
+                commandeSql.Parameters.AddWithValue("@p_statut", p.Statut);
 
                 //Début traitement SQL
                 commandeSql.Prepare();
@@ -594,22 +561,18 @@ namespace TravailDeSession
                 MySqlConnection con = new MySqlConnection(stringConnectionSql);
 
                 //Commande sql
-                MySqlCommand commandeSql = new MySqlCommand();
-                commandeSql.Connection = con;
-                commandeSql.CommandText = @"UPDATE projets SET titre = @titre, dateDebut = @dateDebut, description = @description, budget = @budget,
-                                        nombreEmployesMax = @nombreEmployesMax, totalSalaireDu = @totalSalaireDu, clientId = @clientId,
-                                        statut = @statut WHERE noProjet = @noProjet";
+                MySqlCommand commandeSql = new MySqlCommand("ProcModifProjet", con);
 
                 //Ajout des paramètres
-                commandeSql.Parameters.AddWithValue("@titre", p.Titre);
-                commandeSql.Parameters.AddWithValue("@dateDebut", p.DateDebut);
-                commandeSql.Parameters.AddWithValue("@description", p.Description);
-                commandeSql.Parameters.AddWithValue("@budget", p.Budget);
-                commandeSql.Parameters.AddWithValue("@nombreEmployesMax", p.NombreEmployesMax);
-                commandeSql.Parameters.AddWithValue("@totalSalaireDu", p.TotalSalaireDu);
-                commandeSql.Parameters.AddWithValue("@clientId", p.Client.Identifiant);
-                commandeSql.Parameters.AddWithValue("@statut", p.Statut);
-                commandeSql.Parameters.AddWithValue("@noProjet", p.NoProjet);
+                commandeSql.Parameters.AddWithValue("@p_numero_projet", p.NoProjet);
+                commandeSql.Parameters.AddWithValue("@p_titre", p.Titre);
+                commandeSql.Parameters.AddWithValue("@p_date_debut", p.DateDebut);
+                commandeSql.Parameters.AddWithValue("@p_description", p.Description);
+                commandeSql.Parameters.AddWithValue("@p_budget", p.Budget);
+                commandeSql.Parameters.AddWithValue("@p_nb_employes_requis", p.NombreEmployesMax);
+                commandeSql.Parameters.AddWithValue("@p_total_salaires", p.TotalSalaireDu);
+                commandeSql.Parameters.AddWithValue("@p_client_id", p.Client.Identifiant);
+                commandeSql.Parameters.AddWithValue("@p_statut", p.Statut);
 
                 //Début traitement SQL
                 commandeSql.Prepare();
@@ -640,12 +603,10 @@ namespace TravailDeSession
                 MySqlConnection con = new MySqlConnection(stringConnectionSql);
 
                 //Commande sql
-                MySqlCommand commandeSql = new MySqlCommand();
-                commandeSql.Connection = con;
-                commandeSql.CommandText = @"DELETE FROM projets WHERE noProjet = @noProjet";
+                MySqlCommand commandeSql = new MySqlCommand("ProcDeleteProjet", con);
 
                 //Ajout des paramètres
-                commandeSql.Parameters.AddWithValue("@noProjet", p.NoProjet);
+                commandeSql.Parameters.AddWithValue("@p_numero_projet", p.NoProjet);
 
                 //Début traitement SQL
                 commandeSql.Prepare();
@@ -796,7 +757,7 @@ namespace TravailDeSession
                             double budget = Convert.ToDouble(v[4]);
                             int nombreEmployesMax = Convert.ToInt32(v[5]);
                             double totalSalaireDu = Convert.ToDouble(v[6]);
-                            Client? client = getClientWithId(Convert.ToInt32(v[7]));
+                            Client? client = await getClientWithId(Convert.ToInt32(v[7]));
                             string statut = v[8];
 
                             if (client != null)

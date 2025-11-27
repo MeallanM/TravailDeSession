@@ -7,6 +7,8 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -23,9 +25,26 @@ namespace TravailDeSession
     /// </summary>
     public sealed partial class PageAfficherProjets : Page
     {
+        ObservableCollection<Projet> Projets;
         public PageAfficherProjets()
         {
             InitializeComponent();
+            SingletonGeneralUse.getInstance().getAllProjets();
+            Projets = SingletonGeneralUse.getInstance().ListeProjets;
+        }
+
+        private void lvAfficher_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            var frame = Frame ?? ((Frame)Microsoft.UI.Xaml.Window.Current.Content);
+
+            if (e.ClickedItem is Projet proj)
+            {
+                frame.Navigate(typeof(PageDetailsProjet), proj);
+            }
+        }
+        private void btnAjouterProjet_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(PageAjouterProjet));
         }
     }
 }

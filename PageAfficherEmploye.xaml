@@ -11,12 +11,14 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        
-        <StackPanel HorizontalAlignment="Right" Spacing="12" Grid.Row="0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Spacing="12" Grid.Row="0" Grid.Column="1">
             <Button x:Name="btnAjouterEmploye" Click="btnAjouterEmploye_Click"
             Padding="16,10"
             CornerRadius="12"
@@ -28,23 +30,108 @@
                 </StackPanel>
             </Button>
         </StackPanel>
-        <TextBlock Text="Liste des Employés" FontSize="24" FontWeight="Bold"/>
-        <ListView ItemsSource="{x:Bind Employes}"
-IsItemClickEnabled="True"
-  ItemClick="lvAfficher_ItemClick"
-  Height="300"
-x:Name="lvbShowEmployes">
-            <ListView.ItemTemplate>
-                <DataTemplate x:DataType="local:Employe">
-                    <StackPanel Margin="0,5">
-                        <TextBlock Text="{x:Bind Nom}" FontWeight="Bold"/>
-                        <TextBlock Text="{x:Bind Prenom}" FontWeight="Bold"/>
-                        <TextBlock Text="{x:Bind Email}"/>
-                        <Image Source="{x:Bind PhotoIdentiteImage}" Height="80"/>
-                    </StackPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
 
+        <ScrollViewer Padding="20" VerticalScrollBarVisibility="Auto">
+            <StackPanel Spacing="30">
+
+                <!-- Page Title -->
+                <TextBlock Text="Liste des Employés"
+                   HorizontalAlignment="Center"
+                   x:Name="tbTitrePageAfficherEmployes"
+                   FontSize="24"
+                   FontWeight="Bold"
+                   Foreground="White"/>
+
+                <!-- GridView -->
+                <GridView ItemsSource="{x:Bind Employes}"
+                  IsItemClickEnabled="True"
+                  ItemClick="lvAfficher_ItemClick"
+                  HorizontalAlignment="Center"
+                  x:Name="lvbShowEmployes"
+                  SelectionMode="None">
+
+                    <GridView.ItemTemplate>
+                        <DataTemplate x:DataType="local:Employe">
+                            <Border Width="160"
+                            Padding="10"
+                            Margin="5"
+                            Background="#1E1E1E"
+                            CornerRadius="10"
+                            BorderBrush="#333"
+                            BorderThickness="1">
+
+                                <StackPanel Spacing="8" HorizontalAlignment="Center">
+
+                                    <!-- Rounded Photo -->
+                                    <Ellipse Width="80" Height="80">
+                                        <Ellipse.Fill>
+                                            <ImageBrush ImageSource="{x:Bind PhotoIdentiteImage}" Stretch="UniformToFill"/>
+                                        </Ellipse.Fill>
+                                    </Ellipse>
+
+                                    <!-- Name -->
+                                    <TextBlock Text="{x:Bind Nom}" 
+                                       FontWeight="Bold"
+                                       FontSize="14"
+                                       HorizontalAlignment="Center"
+                                       Foreground="White"/>
+                                    <TextBlock Text="{x:Bind Prenom}" 
+                                       FontWeight="SemiBold"
+                                       FontSize="12"
+                                       HorizontalAlignment="Center"
+                                       Foreground="LightGray"/>
+
+                                    <!-- Email -->
+                                    <TextBlock Text="{x:Bind Email}"
+                                               FontSize="12"
+                                               Foreground="LightGray"
+                                               HorizontalAlignment="Center"
+                                               Width="140"
+                                               TextTrimming="None"
+                                               TextWrapping="NoWrap"
+                                               IsTextSelectionEnabled="True"/>
+
+                                    <!-- Afficher / Modifier Button -->
+                                    <Border Width="140"
+                                    Height="50"
+                                    CornerRadius="6"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center">
+
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="CommonStates">
+                                                <VisualState x:Name="Normal"/>
+                                                <VisualState x:Name="PointerOver">
+                                                    <Storyboard>
+                                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="BtnBorder">
+                                                            <DiscreteObjectKeyFrame KeyTime="0" Value="#0D7A8C"/>
+                                                        </ObjectAnimationUsingKeyFrames>
+                                                    </Storyboard>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+
+                                        <Border x:Name="BtnBorder"
+                                        Background="#0B99B2"
+                                        CornerRadius="6">
+                                            <TextBlock Text="Afficher&#x0a;Modifier"
+                                               Foreground="White"
+                                               FontWeight="Bold"
+                                               FontSize="14"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               TextAlignment="Center"/>
+                                        </Border>
+                                    </Border>
+
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
+
+                </GridView>
+
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>
