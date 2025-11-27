@@ -27,4 +27,28 @@ public sealed partial class PageDetailsClient : Page
     {
         InitializeComponent();
     }
+
+
+
+    private async void btnSupprimer_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button btn)
+        {
+            ContentDialog dialog = new ContentDialog
+            {
+                Title = "Confirmation",
+                Content = "Voulez-vous vraiment supprimer ce client?",
+                PrimaryButtonText = "Oui",
+                CloseButtonText = "Non",
+                XamlRoot = this.XamlRoot
+            };
+
+            var result = await dialog.ShowAsync();
+            if (result == ContentDialogResult.Primary)
+            {
+                if (btn.Tag is Client prod)
+                    SingletonGeneralUse.getInstance().SupprimerClient(prod);
+            }
+        }
+    }
 }

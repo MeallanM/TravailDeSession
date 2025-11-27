@@ -101,10 +101,10 @@ namespace TravailDeSession
                     try
                     {
                         int identifiant = r.GetInt32("id");
-                        string nom = r.GetString("nom");
-                        string adresse = r.GetString("adresse");
-                        string telephone = r.GetString("telephone");
-                        string email = r.GetString("email");
+                        string? nom = r.GetString("nom");
+                        string? adresse = r.GetString("adresse");
+                        string? telephone = r.GetString("telephone");
+                        string? email = r.GetString("email");
 
                         //Création et ajout du client
                         Client client = new Client(identifiant, nom, adresse, telephone, email);
@@ -213,14 +213,14 @@ namespace TravailDeSession
 
                 //Ajout des paramètres
                 commandeSql.Parameters.AddWithValue("@id", c.Identifiant);
-                commandeSql.Parameters.AddWithValue("@nom", c.Nom);
-                commandeSql.Parameters.AddWithValue("@adresse", c.Adresse);
-                commandeSql.Parameters.AddWithValue("@telephone", c.Telephone);
-                commandeSql.Parameters.AddWithValue("@email", c.Email);
+                commandeSql.Parameters.AddWithValue("@p_nom", c.Nom);
+                commandeSql.Parameters.AddWithValue("@p_adresse", c.Adresse);
+                commandeSql.Parameters.AddWithValue("@p_telephone", c.Telephone);
+                commandeSql.Parameters.AddWithValue("@p_email", c.Email);
 
                 //Début traitement SQL
-                commandeSql.Prepare();
                 await con.OpenAsync();
+                commandeSql.Prepare();
                 await commandeSql.ExecuteNonQueryAsync();
             }
             catch (MySqlException ex)
@@ -236,16 +236,14 @@ namespace TravailDeSession
                 MySqlConnection con = new MySqlConnection(stringConnectionSql);
 
                 //Commande sql
-                MySqlCommand commandeSql = new MySqlCommand();
-                commandeSql.Connection = con;
-                commandeSql.CommandText = @"UPDATE clients SET nom = @nom, adresse = @adresse, telephone = @telephone,  email = @email WHERE identifiant = @identifiant";
+                MySqlCommand commandeSql = new MySqlCommand("ProcModifClient", con);
 
                 //Ajout des paramètres
-                commandeSql.Parameters.AddWithValue("@nom", c.Nom);
-                commandeSql.Parameters.AddWithValue("@adresse", c.Adresse);
-                commandeSql.Parameters.AddWithValue("@telephone", c.Telephone);
-                commandeSql.Parameters.AddWithValue("@email", c.Email);
-                commandeSql.Parameters.AddWithValue("@identifiant", c.Identifiant);
+                commandeSql.Parameters.AddWithValue("@p_id", c.Identifiant);
+                commandeSql.Parameters.AddWithValue("@p_nom", c.Nom);
+                commandeSql.Parameters.AddWithValue("@p_adresse", c.Adresse);
+                commandeSql.Parameters.AddWithValue("@p_telephone", c.Telephone);
+                commandeSql.Parameters.AddWithValue("@p_email", c.Email);
 
                 //Début traitement SQL
                 commandeSql.Prepare();
@@ -275,12 +273,10 @@ namespace TravailDeSession
                 MySqlConnection con = new MySqlConnection(stringConnectionSql);
 
                 //Commande sql
-                MySqlCommand commandeSql = new MySqlCommand();
-                commandeSql.Connection = con;
-                commandeSql.CommandText = @"DELETE FROM clients WHERE identifiant = @identifiant";
+                MySqlCommand commandeSql = new MySqlCommand("ProdDeleteClient", con);
 
                 //Ajout des paramètres
-                commandeSql.Parameters.AddWithValue("@identifiant", c.Identifiant);
+                commandeSql.Parameters.AddWithValue("@p_id", c.Identifiant);
 
                 //Début traitement SQL
                 commandeSql.Prepare();

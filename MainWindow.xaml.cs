@@ -23,9 +23,11 @@ namespace TravailDeSession
     /// </summary>
     public sealed partial class MainWindow : Window
     {
+        private DispatcherTimer _toastTimer;
         public MainWindow()
         {
             InitializeComponent();
+            mainFrame.Navigate(typeof(PageAfficherProjets));
         }
 
         private void navView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
@@ -128,6 +130,34 @@ namespace TravailDeSession
                 }
             }
 
+        }
+
+        public void ShowToast(string message)
+        {
+            ToastText.Text = message;
+            ToastContainer.Visibility = Visibility.Visible;
+
+            // Reset timer if already active
+            _toastTimer?.Stop();
+
+            _toastTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromSeconds(5)
+            };
+
+            _toastTimer.Tick += (s, e) =>
+            {
+                ToastContainer.Visibility = Visibility.Collapsed;
+                _toastTimer.Stop();
+            };
+
+            _toastTimer.Start();
+        }
+
+        private void ToastClose_Click(object sender, RoutedEventArgs e)
+        {
+            ToastContainer.Visibility = Visibility.Collapsed;
+            _toastTimer?.Stop();
         }
     }
 }

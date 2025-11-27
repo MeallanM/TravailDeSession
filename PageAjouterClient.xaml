@@ -22,35 +22,42 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- Nom -->
-        <TextBlock Grid.Row="0" Grid.Column="0" 
-                   Text="Nom :" VerticalAlignment="Center" FontSize="14"/>
-        <TextBox Grid.Row="0" Grid.Column="1" 
-                 x:Name="txtNom" Margin="5" FontSize="14"/>
+        <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Margin="0 5">
+            <TextBlock Text="Nom :" FontSize="14"/>
+            <TextBox x:Name="txtNom" Margin="0 3" FontSize="14"/>
+            <TextBlock x:Name="tbxErrorNom" 
+                   Text="Veuillez entrer un nom valide"
+                   Foreground="Red" Visibility="Collapsed"/>
+        </StackPanel>
 
-        <!-- Adresse -->
-        <TextBlock Grid.Row="1" Grid.Column="0" 
-                   Text="Adresse :" VerticalAlignment="Center" FontSize="14"/>
-        <TextBox Grid.Row="1" Grid.Column="1" 
-                 x:Name="txtAdresse" Margin="5" FontSize="14"/>
+        <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Margin="0 5">
+            <TextBlock Text="Adresse :" FontSize="14"/>
+            <TextBox x:Name="txtAdresse" Margin="0 3" FontSize="14"/>
+            <TextBlock x:Name="tbxErrorAdresse"
+                   Text="Veuillez entrer une adresse valide"
+                   Foreground="Red" Visibility="Collapsed"/>
+        </StackPanel>
 
-        <!-- Téléphone -->
-        <TextBlock Grid.Row="2" Grid.Column="0" 
-                   Text="Téléphone :" VerticalAlignment="Center" FontSize="14"/>
-        <TextBox Grid.Row="2" Grid.Column="1" 
-                 x:Name="txtTelephone" Margin="5" FontSize="14"/>
+        <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Margin="0 5">
+            <TextBlock Text="Téléphone :" FontSize="14"/>
+            <TextBox x:Name="txtTelephone" Margin="0 3" FontSize="14"/>
+            <TextBlock x:Name="tbxErrorTelephone"
+                   Text="Veuillez entrer un numéro de téléphone valide"
+                   Foreground="Red" Visibility="Collapsed"/>
+        </StackPanel>
 
-        <!-- Email -->
-        <TextBlock Grid.Row="3" Grid.Column="0" 
-                   Text="Email :" VerticalAlignment="Center" FontSize="14"/>
-        <TextBox Grid.Row="3" Grid.Column="1"
-                 x:Name="txtEmail" Margin="5" FontSize="14"/>
+        <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Margin="0 5">
+            <TextBlock Text="Email :" FontSize="14"/>
+            <TextBox x:Name="txtEmail" Margin="0 3" FontSize="14"/>
+            <TextBlock x:Name="tbxErrorEmail"
+                   Text="Veuillez entrer un email valide"
+                   Foreground="Red" Visibility="Collapsed"/>
+        </StackPanel>
 
-        <!-- Bouton Créer -->
         <Button Grid.Row="4" Grid.Column="1"
-                Content="Créer le Client"
-                Margin="5" Width="150" Height="35"
-                HorizontalAlignment="Right"
-                Click="ClientCreation_Click"/>
+            Content="Créer le Client"
+            Margin="5" Width="150" Height="35"
+            HorizontalAlignment="Right"
+            Click="ClientCreation_Click"/>
     </Grid>
 </Page>

@@ -23,9 +23,47 @@ namespace TravailDeSession
     /// </summary>
     public sealed partial class PageModifierClient : Page
     {
+        private Client currentCli;
         public PageModifierClient()
         {
             InitializeComponent();
+        }
+
+        protected override void OnNavigatedTo(Microsoft.UI.Xaml.Navigation.NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            if (e.Parameter is Client cli)
+            {
+                //Set le client lors de la nav
+                currentCli = cli;
+
+                //Remplir les champs
+                /*------------------------------Décommenter pour que ça fonctionne------------------------------
+                txtTitre.Text = $"Modifier Client #{cli.Identifiant}";
+                txtNom.Text = cli.Nom;
+                txtAdresse.Text = cli.Adresse;
+                txtTelephone = cli.Telephone.ToString();
+                txtCourriel.Text = cli.Email;
+                */
+            }
+        }
+
+        private void Modifier_Click(object sender, RoutedEventArgs e)
+        {
+            if (currentCli != null)
+            {
+                //Set les nouvelles valeurs
+                /*------------------------------Décommenter pour que ça fonctionne------------------------------
+                currentCli.Nom = txtNom.Text;
+                currentCli.Adresse = txtAdresse.Text;
+                currentCli.Telephone = txtTelephone.Text;
+                currentCli.Email = txtCourriel.Text;
+                */
+                //Modifier le client dans la BDD
+                SingletonGeneralUse.getInstance().ModifierClient(currentCli);
+                //Afficher le toast de succès (mainwindow.xaml et .cs)
+                ((MainWindow)App.fenetrePrincipale).ShowToast("Client modifié !");
+            }
         }
     }
 }

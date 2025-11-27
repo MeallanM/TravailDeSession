@@ -33,7 +33,10 @@ namespace TravailDeSession
             SingletonGeneralUse.getInstance().getAllClients();
             Clients = SingletonGeneralUse.getInstance().ListeClients;
         }
-
+        private void btnAjoutClient_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(PageAjouterClient));
+        }
         private void lvAfficher_ItemClick(object sender, ItemClickEventArgs e)
         {
             var selectedClient = e.ClickedItem as Client;
@@ -42,38 +45,6 @@ namespace TravailDeSession
                 {
                     frame.Navigate(typeof(PageDetailsClient), cli);
                 }
-        }
-        private void btnAjoutClient_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button btn2 && btn2.Tag is Client cli)
-            {
-                Frame.Navigate(typeof(PageAjouterClient), cli);
-            }
-        }
-        private void btnModClient_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-         private async void btnSupprimer_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button btn)
-            {
-                ContentDialog dialog = new ContentDialog
-                {
-                    Title = "Confirmation",
-                    Content = "Voulez-vous vraiment supprimer ce client?",
-                    PrimaryButtonText = "Oui",
-                    CloseButtonText = "Non",
-                    XamlRoot = this.XamlRoot
-                };
-
-                var result = await dialog.ShowAsync();
-                if (result == ContentDialogResult.Primary)
-                {
-                    if (btn.Tag is Client prod)
-                        SingletonGeneralUse.getInstance().SupprimerClient(prod);
-                }
-            }
         }
     }
 }
