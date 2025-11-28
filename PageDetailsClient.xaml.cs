@@ -51,4 +51,9 @@ public sealed partial class PageDetailsClient : Page
             }
         }
     }
+
+    private void BtnModifier_Click(object sender, RoutedEventArgs e)
+    {
+
+    }
 }

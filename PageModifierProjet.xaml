@@ -8,7 +8,183 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid>
 
-    </Grid>
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Disabled">
+
+        <Grid Margin="40">
+
+            <Grid.Resources>
+
+                <!-- Colors -->
+                <Color x:Key="PrimaryColor">#D88A34</Color>
+                <Color x:Key="SecondaryColor">#3A6C86</Color>
+                <Color x:Key="NeutralDarkColor">#6A3A2A</Color>
+                <Color x:Key="ErrorColor">#C4473A</Color>
+
+                <!-- Brushes -->
+                <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource PrimaryColor}" />
+                <SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource SecondaryColor}" />
+                <SolidColorBrush x:Key="NeutralDarkBrush" Color="{StaticResource NeutralDarkColor}" />
+                <SolidColorBrush x:Key="ErrorBrush" Color="{StaticResource ErrorColor}" />
+
+                <!-- TextBox Style -->
+                <Style TargetType="TextBox">
+                    <Setter Property="FontSize" Value="14"/>
+                    <Setter Property="Margin" Value="0,3,0,10"/>
+                    <Setter Property="Padding" Value="8"/>
+                    <Setter Property="BorderBrush" Value="#C9ADA4"/>
+                    <Setter Property="BorderThickness" Value="1"/>
+                    <Setter Property="Background" Value="White"/>
+                    <Setter Property="Foreground" Value="{StaticResource NeutralDarkBrush}"/>
+                    <Setter Property="CornerRadius" Value="4"/>
+                </Style>
+
+                <!-- Button Style -->
+                <Style TargetType="Button">
+                    <Setter Property="FontSize" Value="15"/>
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="Background" Value="{StaticResource PrimaryBrush}"/>
+                    <Setter Property="Padding" Value="8,6"/>
+                    <Setter Property="Margin" Value="0,10,0,0"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="HorizontalAlignment" Value="Right"/>
+                    <Setter Property="Width" Value="170"/>
+                    <Setter Property="Height" Value="38"/>
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+
+            </Grid.Resources>
+
+
+            <!-- Layout -->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Title -->
+            <TextBlock Grid.Row="0"
+                       Text="Créer un Projet"
+                       FontSize="22"
+                       HorizontalAlignment="Center"
+                       Foreground="{StaticResource PrimaryBrush}"
+                       FontWeight="SemiBold"
+                       Margin="0,0,0,20"/>
+
+
+            <!-- TITRE -->
+            <StackPanel Grid.Row="1" Margin="0,5">
+                <TextBlock Text="Titre" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
+                <TextBox x:Name="txtTitre"/>
+                <TextBlock x:Name="tbxErrorTitre"
+                           Text="Veuillez entrer un titre valide"
+                           Foreground="{StaticResource ErrorBrush}"
+                           FontSize="12"
+                           Visibility="Collapsed"/>
+            </StackPanel>
+
+
+            <!-- DATE DÉBUT -->
+            <StackPanel Grid.Row="2" Margin="0,5">
+                <TextBlock Text="Date de début" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
+                <DatePicker x:Name="dpDateDebut" Margin="0,3,0,10"/>
+                <TextBlock x:Name="tbxErrorDateDebut"
+                           Text="Veuillez sélectionner une date valide"
+                           Foreground="{StaticResource ErrorBrush}"
+                           FontSize="12"
+                           Visibility="Collapsed"/>
+            </StackPanel>
+
+
+            <!-- DESCRIPTION -->
+            <StackPanel Grid.Row="3" Margin="0,5">
+                <TextBlock Text="Description" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
+                <TextBox x:Name="txtDescription"
+                         AcceptsReturn="True"
+                         TextWrapping="Wrap"
+                         Height="100"/>
+                <TextBlock x:Name="tbxErrorDescription"
+                           Text="Veuillez entrer une description valide"
+                           Foreground="{StaticResource ErrorBrush}"
+                           FontSize="12"
+                           Visibility="Collapsed"/>
+            </StackPanel>
+
+
+            <!-- BUDGET -->
+            <StackPanel Grid.Row="4" Margin="0,5">
+                <TextBlock Text="Budget" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
+                <TextBox x:Name="txtBudget" PlaceholderText="Ex: 120000"/>
+                <TextBlock x:Name="tbxErrorBudget"
+                           Text="Veuillez entrer un budget valide"
+                           Foreground="{StaticResource ErrorBrush}"
+                           FontSize="12"
+                           Visibility="Collapsed"/>
+            </StackPanel>
+
+
+            <!-- NB EMPLOYÉS REQUIS -->
+            <StackPanel Grid.Row="5" Margin="0,5">
+                <TextBlock Text="Nombre d'employés requis" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
+                <TextBox x:Name="txtNbEmployesRequis" PlaceholderText="Ex: 8"/>
+                <TextBlock x:Name="tbxErrorNbEmployes"
+                           Text="Veuillez entrer un nombre valide"
+                           Foreground="{StaticResource ErrorBrush}"
+                           FontSize="12"
+                           Visibility="Collapsed"/>
+            </StackPanel>
+
+
+            <!-- TOTAL SALAIRES -->
+            <StackPanel Grid.Row="6" Margin="0,5">
+                <TextBlock Text="Total salaires" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
+                <TextBox x:Name="txtTotalSalaires" PlaceholderText="Ex: 50000"/>
+                <TextBlock x:Name="tbxErrorSalaires"
+                           Text="Veuillez entrer un total valide"
+                           Foreground="{StaticResource ErrorBrush}"
+                           FontSize="12"
+                           Visibility="Collapsed"/>
+            </StackPanel>
+
+
+            <!-- CLIENT ID -->
+            <StackPanel Grid.Row="7" Margin="0,5">
+                <TextBlock Text="Client ID" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
+                <TextBox x:Name="txtClientId"/>
+                <TextBlock x:Name="tbxErrorClientId"
+                           Text="Veuillez entrer un ID client valide"
+                           Foreground="{StaticResource ErrorBrush}"
+                           FontSize="12"
+                           Visibility="Collapsed"/>
+            </StackPanel>
+
+
+            <!-- STATUT -->
+            <StackPanel Grid.Row="8" Margin="0,5">
+                <TextBlock Text="Statut (Actif / Inactif)" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
+                <ToggleSwitch x:Name="tsStatut"
+                              OffContent="Inactif"
+                              OnContent="Actif"
+                              Margin="0,3,0,10"/>
+            </StackPanel>
+
+
+            <!-- BUTTON -->
+            <Button Grid.Row="9"
+                    Content="Modifier le Projet"
+                    Click="Modifier_Click"/>
+        </Grid>
+
+    </ScrollViewer>
+    
+    
 </Page>

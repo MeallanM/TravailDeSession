@@ -65,5 +65,10 @@ namespace TravailDeSession
                 ((MainWindow)App.fenetrePrincipale).ShowToast("Client modifié !");
             }
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

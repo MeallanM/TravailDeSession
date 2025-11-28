@@ -8,7 +8,108 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid>
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+              HorizontalScrollBarVisibility="Disabled">
 
-    </Grid>
+        <Grid Margin="40">
+
+            <Grid.Resources>
+                <!-- Colors -->
+                <Color x:Key="PrimaryColor">#D88A34</Color>
+                <Color x:Key="SecondaryColor">#3A6C86</Color>
+                <Color x:Key="NeutralDarkColor">#6A3A2A</Color>
+                <Color x:Key="ErrorColor">#C4473A</Color>
+
+                <!-- Brushes -->
+                <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource PrimaryColor}" />
+                <SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource SecondaryColor}" />
+                <SolidColorBrush x:Key="NeutralDarkBrush" Color="{StaticResource NeutralDarkColor}" />
+                <SolidColorBrush x:Key="ErrorBrush" Color="{StaticResource ErrorColor}" />
+
+                <!-- Button Style -->
+                <Style TargetType="Button">
+                    <Setter Property="FontSize" Value="15"/>
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="Background" Value="{StaticResource PrimaryBrush}"/>
+                    <Setter Property="Padding" Value="8,6"/>
+                    <Setter Property="Margin" Value="0,10,0,0"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                    <Setter Property="Height" Value="38"/>
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Grid.Resources>
+
+            <!-- Layout -->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Title -->
+            <TextBlock Grid.Row="0"
+                   Text="Détails du Client"
+                   FontSize="22"
+                   HorizontalAlignment="Center"
+                   Foreground="{StaticResource PrimaryBrush}"
+                   FontWeight="SemiBold"
+                   Margin="0,0,0,20"/>
+
+            <!-- ID -->
+            <StackPanel Grid.Row="1" Margin="0,5">
+                <TextBlock Text="id" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
+                <TextBlock x:Name="tbId" FontSize="14" Foreground="Black"/>
+            </StackPanel>
+
+            <!-- NOM -->
+            <StackPanel Grid.Row="1" Margin="0,5">
+                <TextBlock Text="Nom" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
+                <TextBlock x:Name="tbNom" FontSize="14" Foreground="Black"/>
+            </StackPanel>
+
+            <!-- ADRESSE -->
+            <StackPanel Grid.Row="2" Margin="0,5">
+                <TextBlock Text="Adresse" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
+                <TextBlock x:Name="tbAdresse" FontSize="14" Foreground="Black"/>
+            </StackPanel>
+
+            <!-- TELEPHONE -->
+            <StackPanel Grid.Row="3" Margin="0,5">
+                <TextBlock Text="Téléphone" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
+                <TextBlock x:Name="tbTelephone" FontSize="14" Foreground="Black"/>
+            </StackPanel>
+
+            <!-- EMAIL -->
+            <StackPanel Grid.Row="4" Margin="0,5">
+                <TextBlock Text="Email" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
+                <TextBlock x:Name="tbEmail" FontSize="14" Foreground="Black"/>
+            </StackPanel>
+
+            <!-- Modifier / Supprimer Buttons -->
+            <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Stretch" Spacing="10" Margin="0,20,0,0">
+                <Grid HorizontalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Column="0"
+                        Content="Modifier"
+                        HorizontalAlignment="Stretch"
+                        Click="BtnModifier_Click"/>
+                    <Button Grid.Column="1"
+                        Content="Supprimer"
+                        Background="{StaticResource ErrorBrush}"
+                        HorizontalAlignment="Stretch"
+                        Click="btnSupprimer_Click"/>
+                </Grid>
+            </StackPanel>
+
+        </Grid>
+    </ScrollViewer>
+
 </Page>
