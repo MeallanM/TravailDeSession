@@ -7,9 +7,56 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
+    
+    
+    <Grid Margin="40">
 
-    <Grid Margin="30">
+        <Grid.Resources>
+
+            <!-- Colors -->
+            <Color x:Key="PrimaryColor">#D88A34</Color>
+            <Color x:Key="SecondaryColor">#3A6C86</Color>
+            <Color x:Key="NeutralDarkColor">#6A3A2A</Color>
+            <Color x:Key="ErrorColor">#C4473A</Color>
+
+            <!-- Brushes -->
+            <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource PrimaryColor}" />
+            <SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource SecondaryColor}" />
+            <SolidColorBrush x:Key="NeutralDarkBrush" Color="{StaticResource NeutralDarkColor}" />
+            <SolidColorBrush x:Key="ErrorBrush" Color="{StaticResource ErrorColor}" />
+
+            <!-- TextBox Style  -->
+            <Style TargetType="TextBox">
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="Margin" Value="0,3,0,10"/>
+                <Setter Property="Padding" Value="8"/>
+                <Setter Property="BorderBrush" Value="#C9ADA4"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="Background" Value="White"/>
+                <Setter Property="Foreground" Value="{StaticResource NeutralDarkBrush}"/>
+                <Setter Property="CornerRadius" Value="4"/>
+            </Style>
+
+            <!-- Button Style  -->
+            <Style TargetType="Button">
+                <Setter Property="FontSize" Value="15"/>
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="Background" Value="{StaticResource PrimaryBrush}"/>
+                <Setter Property="Padding" Value="8,6"/>
+                <Setter Property="Margin" Value="0,10,0,0"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="HorizontalAlignment" Value="Right"/>
+                <Setter Property="Width" Value="170"/>
+                <Setter Property="Height" Value="38"/>
+                <Setter Property="CornerRadius" Value="5"/>
+            </Style>
+
+        </Grid.Resources>
+
+
+        <!-- Layout -->
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -17,40 +64,62 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="150"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+        <!-- Title -->
+        <TextBlock Grid.Row="0"
+                   Text="Créer un Client"
+                   FontSize="22"
+                   HorizontalAlignment="Center"
+                   Foreground="{StaticResource PrimaryBrush}"
+                   FontWeight="SemiBold"
+                   Margin="0,0,0,20"/>
 
         <!-- Nom -->
-        <TextBlock Grid.Row="0" Grid.Column="0" 
-                   Text="Nom :" VerticalAlignment="Center" FontSize="14"/>
-        <TextBox Grid.Row="0" Grid.Column="1" 
-                 x:Name="txtNom" Margin="5" FontSize="14"/>
+        <StackPanel Grid.Row="1" Margin="0,5">
+            <TextBlock Text="Nom" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
+            <TextBox x:Name="txtNom"/>
+            <TextBlock x:Name="tbxErrorNom"
+                       Text="Veuillez entrer un nom valide"
+                       Foreground="{StaticResource ErrorBrush}"
+                       FontSize="12"
+                       Visibility="Collapsed"/>
+        </StackPanel>
 
         <!-- Adresse -->
-        <TextBlock Grid.Row="1" Grid.Column="0" 
-                   Text="Adresse :" VerticalAlignment="Center" FontSize="14"/>
-        <TextBox Grid.Row="1" Grid.Column="1" 
-                 x:Name="txtAdresse" Margin="5" FontSize="14"/>
+        <StackPanel Grid.Row="2" Margin="0,5">
+            <TextBlock Text="Adresse" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
+            <TextBox x:Name="txtAdresse"/>
+            <TextBlock x:Name="tbxErrorAdresse"
+                       Text="Veuillez entrer une adresse valide"
+                       Foreground="{StaticResource ErrorBrush}"
+                       FontSize="12"
+                       Visibility="Collapsed"/>
+        </StackPanel>
 
         <!-- Téléphone -->
-        <TextBlock Grid.Row="2" Grid.Column="0" 
-                   Text="Téléphone :" VerticalAlignment="Center" FontSize="14"/>
-        <TextBox Grid.Row="2" Grid.Column="1" 
-                 x:Name="txtTelephone" Margin="5" FontSize="14"/>
+        <StackPanel Grid.Row="3" Margin="0,5">
+            <TextBlock Text="Téléphone" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
+            <TextBox x:Name="txtTelephone"/>
+            <TextBlock x:Name="tbxErrorTelephone"
+                       Text="Veuillez entrer un numéro de téléphone valide"
+                       Foreground="{StaticResource ErrorBrush}"
+                       FontSize="12"
+                       Visibility="Collapsed"/>
+        </StackPanel>
 
         <!-- Email -->
-        <TextBlock Grid.Row="3" Grid.Column="0" 
-                   Text="Email :" VerticalAlignment="Center" FontSize="14"/>
-        <TextBox Grid.Row="3" Grid.Column="1"
-                 x:Name="txtEmail" Margin="5" FontSize="14"/>
+        <StackPanel Grid.Row="4" Margin="0,5">
+            <TextBlock Text="Email" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
+            <TextBox x:Name="txtEmail"/>
+            <TextBlock x:Name="tbxErrorEmail"
+                       Text="Veuillez entrer un email valide"
+                       Foreground="{StaticResource ErrorBrush}"
+                       FontSize="12"
+                       Visibility="Collapsed"/>
+        </StackPanel>
 
-        <!-- Bouton Créer -->
-        <Button Grid.Row="4" Grid.Column="1"
+        <!-- Button -->
+        <Button Grid.Row="5"
                 Content="Créer le Client"
-                Margin="5" Width="150" Height="35"
-                HorizontalAlignment="Right"
                 Click="ClientCreation_Click"/>
     </Grid>
 </Page>

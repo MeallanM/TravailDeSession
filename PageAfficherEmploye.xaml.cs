@@ -40,47 +40,12 @@ namespace TravailDeSession
 
             if (e.ClickedItem is Employe emp)
             {
-                frame.Navigate(typeof(PageModifierEmploye), emp);
+                frame.Navigate(typeof(PageDetailsEmploye), emp);
             }
         }
-
-        private void btnAfficher_Click(object sender, RoutedEventArgs e)
+        private void btnAjouterEmploye_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button btn2 && btn2.Tag is Employe emp)
-            {
-                Frame.Navigate(typeof(/*AJouter le whatever qui gère sa. Je mets dequoi temporaire*/PageAfficherClients), emp);
-            }
-        }
-
-        private void btnModifier_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button btn2 && btn2.Tag is Employe emp)
-            {
-                Frame.Navigate(typeof(/*AJouter le whatever qui gère sa. Je mets dequoi temporaire*/PageAfficherClients), emp);
-            }
-        }
-
-
-        private async void btnSupprimer_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button btn)
-            {
-                ContentDialog dialog = new ContentDialog
-                {
-                    Title = "Confirmation",
-                    Content = "Voulez-vous vraiment supprimer cet employé?",
-                    PrimaryButtonText = "Oui",
-                    CloseButtonText = "Non",
-                    XamlRoot = this.XamlRoot
-                };
-
-                var result = await dialog.ShowAsync();
-                if (result == ContentDialogResult.Primary)
-                {
-                    if (btn.Tag is Employe emp)
-                        SingletonGeneralUse.getInstance().SupprimerEmploye(emp);
-                }
-            }
+            Frame.Navigate(typeof(PageAjouterEmploye));
         }
     }
 }

@@ -20,6 +20,8 @@
     <None Remove="PageAjouterClient.xaml" />
     <None Remove="PageAjouterEmploye.xaml" />
     <None Remove="PageAjouterProjet.xaml" />
+    <None Remove="PageDetailsClient.xaml" />
+    <None Remove="PageDetailsProjet.xaml" />
     <None Remove="PageModifierClient.xaml" />
     <None Remove="PageModifierEmploye.xaml" />
     <None Remove="PageModifierProjet.xaml" />
@@ -51,6 +53,19 @@
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.7175" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.251106002" />
     <PackageReference Include="MySql.Data" Version="9.5.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="PageDetailsProjet.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="PageDetailsClient.xaml">
+	<Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="PageDetailsEmploye.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="LoginDialog.xaml">

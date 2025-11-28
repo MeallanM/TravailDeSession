@@ -27,5 +27,10 @@ namespace TravailDeSession
         {
             InitializeComponent();
         }
+
+        private void Modifier_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

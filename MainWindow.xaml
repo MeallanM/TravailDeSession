@@ -17,9 +17,7 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <MenuBar Grid.Row="0" >
@@ -38,7 +36,36 @@
             </MenuBarItem>
         </MenuBar>
 
-        <NavigationView PaneDisplayMode="Left" PaneTitle="Gestion de projets" x:Name="navView" ItemInvoked="navView_ItemInvoked" Grid.Row="1" >
+        <Grid x:Name="ToastContainer"
+      VerticalAlignment="Top"
+      HorizontalAlignment="Center"
+      Margin="0,20,0,0"
+      Visibility="Collapsed">
+
+            <Border x:Name="ToastMessage"
+            Background="#FF333333"
+            Padding="14"
+            CornerRadius="8"
+            Opacity="0.95">
+
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                    <TextBlock x:Name="ToastText"
+                       Foreground="White"
+                       FontSize="14"
+                       VerticalAlignment="Center"/>
+
+                    <Button Content="✕"
+                    Click="ToastClose_Click"
+                    Background="Transparent"
+                    Foreground="White"
+                    BorderThickness="0"
+                    FontSize="14"
+                    Padding="0"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <NavigationView VerticalAlignment="Stretch" PaneDisplayMode="Left" PaneTitle="Gestion de projets" x:Name="navView" ItemInvoked="navView_ItemInvoked" Grid.Row="1">
             <NavigationView.MenuItems>
                 <NavigationViewItemHeader Content="Gestion de projets"/>
                 <NavigationViewItem Content="Voir les Clients" x:Name="nviShowClients" Icon="View" Tag="AfficherClients"/>
@@ -54,6 +81,5 @@
             </NavigationView.FooterMenuItems>
             <Frame x:Name="mainFrame" />
         </NavigationView>
-        <NavigationViewItemSeparator />
     </Grid>
 </Window>

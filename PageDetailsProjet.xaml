@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Page
-    x:Class="TravailDeSession.PageModifierClient"
+    x:Class="TravailDeSession.PageDetailsProjet"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:TravailDeSession"
@@ -46,23 +46,21 @@
                 <RowDefinition Height="Auto"/>
                 <!-- Title -->
                 <RowDefinition Height="Auto"/>
-                <!-- Matricule -->
+                <!-- Numéro Projet -->
                 <RowDefinition Height="Auto"/>
-                <!-- Nom -->
+                <!-- Titre -->
                 <RowDefinition Height="Auto"/>
-                <!-- Prenom -->
+                <!-- Date Début -->
                 <RowDefinition Height="Auto"/>
-                <!-- Date Naissance -->
+                <!-- Description -->
                 <RowDefinition Height="Auto"/>
-                <!-- Email -->
+                <!-- Budget -->
                 <RowDefinition Height="Auto"/>
-                <!-- Adresse -->
+                <!-- Nb Employés -->
                 <RowDefinition Height="Auto"/>
-                <!-- Date Embauche -->
+                <!-- Total Salaires -->
                 <RowDefinition Height="Auto"/>
-                <!-- Taux Horaire -->
-                <RowDefinition Height="Auto"/>
-                <!-- Photo URL -->
+                <!-- Client ID -->
                 <RowDefinition Height="Auto"/>
                 <!-- Statut -->
                 <RowDefinition Height="Auto"/>
@@ -71,87 +69,83 @@
 
             <!-- Title -->
             <TextBlock Grid.Row="0"
-                   Text="Détails de l'Employé"
+                   Text="Détails du Projet"
                    FontSize="22"
                    HorizontalAlignment="Center"
                    Foreground="{StaticResource PrimaryBrush}"
                    FontWeight="SemiBold"
                    Margin="0,0,0,20"/>
 
-            <!-- Matricule -->
+            <!-- Numéro Projet -->
             <StackPanel Grid.Row="1" Margin="0,5">
-                <TextBlock Text="Matricule" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
-                <TextBlock x:Name="tbMatricule" FontSize="14" Foreground="Black"/>
+                <TextBlock Text="Numéro Projet" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
+                <TextBlock x:Name="tbNumeroProjet" FontSize="14" Foreground="Black"/>
             </StackPanel>
 
-            <!-- Nom -->
+            <!-- Titre -->
             <StackPanel Grid.Row="2" Margin="0,5">
-                <TextBlock Text="Nom" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
-                <TextBlock x:Name="tbNom" FontSize="14" Foreground="Black"/>
+                <TextBlock Text="Titre" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
+                <TextBlock x:Name="tbTitre" FontSize="14" Foreground="Black"/>
             </StackPanel>
 
-            <!-- Prénom -->
+            <!-- Date Début -->
             <StackPanel Grid.Row="3" Margin="0,5">
-                <TextBlock Text="Prénom" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
-                <TextBlock x:Name="tbPrenom" FontSize="14" Foreground="Black"/>
+                <TextBlock Text="Date de début" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
+                <TextBlock x:Name="tbDateDebut" FontSize="14" Foreground="Black"/>
             </StackPanel>
 
-            <!-- Date de naissance -->
+            <!-- Description -->
             <StackPanel Grid.Row="4" Margin="0,5">
-                <TextBlock Text="Date de naissance" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
-                <TextBlock x:Name="tbDateNaissance" FontSize="14" Foreground="Black"/>
+                <TextBlock Text="Description" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
+                <TextBlock x:Name="tbDescription" FontSize="14" Foreground="Black" TextWrapping="Wrap"/>
             </StackPanel>
 
-            <!-- Email -->
+            <!-- Budget -->
             <StackPanel Grid.Row="5" Margin="0,5">
-                <TextBlock Text="Email" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
-                <TextBlock x:Name="tbEmail" FontSize="14" Foreground="Black"/>
+                <TextBlock Text="Budget" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
+                <TextBlock x:Name="tbBudget" FontSize="14" Foreground="Black"/>
             </StackPanel>
 
-            <!-- Adresse -->
+            <!-- Nombre d'employés requis -->
             <StackPanel Grid.Row="6" Margin="0,5">
-                <TextBlock Text="Adresse" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
-                <TextBlock x:Name="tbAdresse" FontSize="14" Foreground="Black"/>
+                <TextBlock Text="Nombre d'employés requis" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
+                <TextBlock x:Name="tbNbEmployesRequis" FontSize="14" Foreground="Black"/>
             </StackPanel>
 
-            <!-- Date d'embauche -->
+            <!-- Total Salaires -->
             <StackPanel Grid.Row="7" Margin="0,5">
-                <TextBlock Text="Date d'embauche" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
-                <TextBlock x:Name="tbDateEmbauche" FontSize="14" Foreground="Black"/>
+                <TextBlock Text="Total salaires" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
+                <TextBlock x:Name="tbTotalSalaires" FontSize="14" Foreground="Black"/>
             </StackPanel>
 
-            <!-- Taux horaire -->
+            <!-- Client ID -->
             <StackPanel Grid.Row="8" Margin="0,5">
-                <TextBlock Text="Taux horaire" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
-                <TextBlock x:Name="tbTauxHoraire" FontSize="14" Foreground="Black"/>
-            </StackPanel>
-
-            <!-- Photo URL -->
-            <StackPanel Grid.Row="9" Margin="0,5">
-                <TextBlock Text="Photo URL" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
-                <TextBlock x:Name="tbPhotoURL" FontSize="14" Foreground="Black"/>
+                <TextBlock Text="Client ID" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
+                <TextBlock x:Name="tbClientId" FontSize="14" Foreground="Black"/>
             </StackPanel>
 
             <!-- Statut -->
-            <StackPanel Grid.Row="10" Margin="0,5">
+            <StackPanel Grid.Row="9" Margin="0,5">
                 <TextBlock Text="Statut (Actif / Inactif)" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
                 <TextBlock x:Name="tbStatut" FontSize="14" Foreground="Black"/>
             </StackPanel>
 
             <!-- Buttons -->
-            <StackPanel Grid.Row="11" Orientation="Horizontal" HorizontalAlignment="Stretch" Spacing="10" Margin="0,20,0,0">
+            <StackPanel Grid.Row="10" Orientation="Horizontal" HorizontalAlignment="Stretch" Spacing="10" Margin="0,20,0,0">
                 <Grid HorizontalAlignment="Stretch">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Button Grid.Column="0" Content="Modifier" HorizontalAlignment="Stretch" Click="Modifier_Click"/>
-                    <Button Grid.Column="1" Content="Supprimer" Background="{StaticResource ErrorBrush}" HorizontalAlignment="Stretch" />
+                    <Button Grid.Column="0" Content="Modifier" HorizontalAlignment="Stretch" />
+                    <Button Grid.Column="1" Content="Supprimer" Background="{StaticResource ErrorBrush}"
+                            HorizontalAlignment="Stretch" />
                 </Grid>
             </StackPanel>
 
         </Grid>
     </ScrollViewer>
+
 
 </Page>
