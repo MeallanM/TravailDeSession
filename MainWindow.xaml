@@ -78,6 +78,7 @@
                 <NavigationViewItem Content="Connexion" x:Name="nviConnection" Icon="Switch" Tag="Connection" />
                 <NavigationViewItem Content="Déconnexion" x:Name="nviDeconnection" Icon="Switch" Tag="Deconnection" />
                 <NavigationViewItem Content="Aide" x:Name="nviAide" Icon="Help" Tag="aide"/>
+                <NavigationViewItem Content="Quitter" x:Name="nviQuit" Icon="LeaveChat" Tag="Quitter"/>
             </NavigationView.FooterMenuItems>
             <Frame x:Name="mainFrame" />
         </NavigationView>

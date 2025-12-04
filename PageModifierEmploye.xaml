@@ -74,7 +74,7 @@
 
             <!-- Title -->
             <TextBlock Grid.Row="0"
-                   Text="Créer un Employé"
+                   x:Name="tbTitre"
                    FontSize="22"
                    HorizontalAlignment="Center"
                    Foreground="{StaticResource PrimaryBrush}"
@@ -104,21 +104,6 @@
                        FontSize="12"
                        Visibility="Collapsed"/>
             </StackPanel>
-
-
-            <!-- DATE DE NAISSANCE -->
-            <StackPanel Grid.Row="3" Margin="0,5">
-                <TextBlock Text="Date de naissance" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
-                <DatePicker x:Name="dpDateNaissance" Margin="0,3,0,10"/>
-                <TextBlock x:Name="tbxErrorNaissance"
-                       Text="Veuillez sélectionner une date valide"
-                       Foreground="{StaticResource ErrorBrush}"
-                       FontSize="12"
-                       Visibility="Collapsed"/>
-            </StackPanel>
-
-
-            <!-- EMAIL -->
             <StackPanel Grid.Row="4" Margin="0,5">
                 <TextBlock Text="Email" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
                 <TextBox x:Name="txtEmail"/>
@@ -140,29 +125,24 @@
                        FontSize="12"
                        Visibility="Collapsed"/>
             </StackPanel>
-
-
-            <!-- DATE D’EMBAUCHE -->
-            <StackPanel Grid.Row="6" Margin="0,5">
-                <TextBlock Text="Date d'embauche" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
-                <DatePicker x:Name="dpDateEmbauche" Margin="0,3,0,10"/>
-                <TextBlock x:Name="tbxErrorEmbauche"
-                       Text="Veuillez sélectionner une date valide"
-                       Foreground="{StaticResource ErrorBrush}"
-                       FontSize="12"
-                       Visibility="Collapsed"/>
-            </StackPanel>
-
-
             <!-- TAUX HORAIRE -->
             <StackPanel Grid.Row="7" Margin="0,5">
-                <TextBlock Text="Taux horaire" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
-                <TextBox x:Name="txtTauxHoraire" PlaceholderText="Ex: 25.50"/>
+                <TextBlock Text="Taux horaire" 
+               FontSize="15" 
+               Foreground="{StaticResource NeutralDarkBrush}"/>
+
+                <NumberBox x:Name="nbTauxHoraire"
+               PlaceholderText="Ex: 25.50"
+               Minimum="0"
+               SmallChange="0.25"
+               LargeChange="1"
+               SpinButtonPlacementMode="Compact" />
+
                 <TextBlock x:Name="tbxErrorTaux"
-                       Text="Veuillez entrer un taux horaire valide"
-                       Foreground="{StaticResource ErrorBrush}"
-                       FontSize="12"
-                       Visibility="Collapsed"/>
+               Text="Veuillez entrer un taux horaire valide"
+               Foreground="{StaticResource ErrorBrush}"
+               FontSize="12"
+               Visibility="Collapsed"/>
             </StackPanel>
 
 
@@ -181,14 +161,14 @@
             <!-- STATUT (bool) -->
             <StackPanel Grid.Row="9" Margin="0,5">
                 <TextBlock Text="Statut (Actif / Inactif)" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
-                <ToggleSwitch x:Name="tsStatut" OffContent="Inactif" OnContent="Actif" Margin="0,3,0,10"/>
+                <ToggleSwitch x:Name="tsStatut" OffContent="Permanent" OnContent="Journalier" Margin="0,3,0,10"/>
             </StackPanel>
 
 
             <!-- Button  TU PEUX L'ENLEVER SI TA PAS BESOIN-->
             <Button Grid.Row="10"
                 Content="Modifier l'Employé"
-                Click="Modifier_Click"/>
+                Click="BtnModifier_Click"/>
         </Grid>
 
     </ScrollViewer>

@@ -18,7 +18,7 @@ namespace TravailDeSession
         string adresse = string.Empty;
         DateTime dateEmbauche = DateTime.Now;
         double tauxHoraire;
-        Uri? photoIdentite;
+        string photoIdentite;
         string statut = string.Empty;
 
         // Fix: Implement the PropertyChanged event required by INotifyPropertyChanged
@@ -34,10 +34,10 @@ namespace TravailDeSession
             adresse = string.Empty;
             dateEmbauche = DateTime.Now;
             tauxHoraire = 0;
-            photoIdentite = new Uri("https://randomuser.me/api/portraits/thumb/men/75.jpg");
+            photoIdentite = "https://randomuser.me/api/portraits/thumb/men/75.jpg";
             statut = string.Empty;
         }
-        public Employe(string matricule, string nom, string prenom, DateTime dateNaissance, string email, string adresse, DateTime dateEmbauche, double tauxHoraire, Uri? photoIdentite, string statut)
+        public Employe(string matricule, string nom, string prenom, DateTime dateNaissance, string email, string adresse, DateTime dateEmbauche, double tauxHoraire, string photoIdentite, string statut)
         {
             Matricule = matricule;
             Nom = nom;
@@ -59,21 +59,29 @@ namespace TravailDeSession
         public string Adresse { get => adresse; set => adresse = value; }
         public DateTime DateEmbauche { get => dateEmbauche; set => dateEmbauche = value; }
         public double TauxHoraire { get => tauxHoraire; set => tauxHoraire = value; }
-        public Uri? PhotoIdentite
+        public string PhotoIdentite
         {
             get => photoIdentite; set {
                 photoIdentite = value;
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(PhotoIdentite));
+                OnPropertyChanged(nameof(PhotoIdentiteImage));
             } }
         public BitmapImage PhotoIdentiteImage
         {
             get
             {
-                if (photoIdentite != null)
-                    return new BitmapImage(photoIdentite);
+                if (!string.IsNullOrWhiteSpace(photoIdentite))
+                {
+                    try
+                    {
+                        return new BitmapImage(new Uri(photoIdentite));
+                    }
+                    catch
+                    {
+                    }
+                }
+                        return new BitmapImage(new Uri("https://preview.redd.it/megamind-no-bitches-meme-3264x3264-v0-gb5bw6safuu81.png?auto=webp&s=4b4153535f64500015b29a52623df076cf2ce076"));
 
-                return new BitmapImage(new Uri("https://preview.redd.it/megamind-no-bitches-meme-3264x3264-v0-gb5bw6safuu81.png?auto=webp&s=4b4153535f64500015b29a52623df076cf2ce076"));
             }
         }
         public string Statut { get => statut; set => statut = value; }

@@ -25,14 +25,16 @@ namespace TravailDeSession
     /// </summary>
     public sealed partial class PageAfficherProjets : Page
     {
+        //Collection contexte pour lister les projets
         ObservableCollection<Projet> Projets;
         public PageAfficherProjets()
         {
             InitializeComponent();
-            SingletonGeneralUse.getInstance().getAllProjets();
+            //Récupération de la liste des projets en cours
+            SingletonGeneralUse.getInstance().getAllProjetsEnCours();
             Projets = SingletonGeneralUse.getInstance().ListeProjets;
         }
-
+        /*On click de la gridview*/
         private void lvAfficher_ItemClick(object sender, ItemClickEventArgs e)
         {
             var frame = Frame ?? ((Frame)Microsoft.UI.Xaml.Window.Current.Content);
@@ -42,6 +44,7 @@ namespace TravailDeSession
                 frame.Navigate(typeof(PageDetailsProjet), proj);
             }
         }
+        //On click du bouton ajouter projet
         private void btnAjouterProjet_Click(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(PageAjouterProjet));

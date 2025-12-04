@@ -52,7 +52,7 @@
 
             <!-- Title -->
             <TextBlock Grid.Row="0"
-                   Text="Détails du Client"
+                       x:Name="tbTitre"
                    FontSize="22"
                    HorizontalAlignment="Center"
                    Foreground="{StaticResource PrimaryBrush}"
@@ -103,6 +103,7 @@
                         Click="BtnModifier_Click"/>
                     <Button Grid.Column="1"
                         Content="Supprimer"
+                            Tag="{x:Bind}"
                         Background="{StaticResource ErrorBrush}"
                         HorizontalAlignment="Stretch"
                         Click="btnSupprimer_Click"/>

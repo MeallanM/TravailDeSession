@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text.RegularExpressions;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
@@ -38,37 +39,78 @@ namespace TravailDeSession
                 currentCli = cli;
 
                 //Remplir les champs
-                /*------------------------------Décommenter pour que ça fonctionne------------------------------
-                txtTitre.Text = $"Modifier Client #{cli.Identifiant}";
-                txtNom.Text = cli.Nom;
-                txtAdresse.Text = cli.Adresse;
-                txtTelephone = cli.Telephone.ToString();
-                txtCourriel.Text = cli.Email;
-                */
+                tbTitre.Text = $"Modifier Client #{cli.Identifiant}";
+                tbNom.Text = cli.Nom;
+                tbAdresse.Text = cli.Adresse;
+                tbTelephone.Text = cli.Telephone.ToString();
+                tbEmail.Text = cli.Email;
             }
         }
-
+        bool IsValidEmail(string email)
+        {
+            return Regex.IsMatch(email,
+                @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+        }
+        bool IsValidPhone(string phone)
+        {
+            return Regex.IsMatch(phone,
+                @"^\D*(\d\D*){10}$");
+        }
         private void Modifier_Click(object sender, RoutedEventArgs e)
         {
-            if (currentCli != null)
+            bool valide = true;
+
+            string nom = tbNom.Text.Trim();
+            string adresse = tbAdresse.Text.Trim();
+            string telephone = tbTelephone.Text.Trim();
+            string email = tbEmail.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(nom))
             {
+                tbxErrorNom.Visibility = Visibility.Visible;
+                valide = false;
+            }
+            else
+                tbxErrorNom.Visibility = Visibility.Collapsed;
+            if (string.IsNullOrWhiteSpace(adresse))
+            {
+                tbxErrorAdresse.Visibility = Visibility.Visible;
+                valide = false;
+            }
+            else
+                tbxErrorAdresse.Visibility = Visibility.Collapsed;
+            if (string.IsNullOrWhiteSpace(telephone) || !IsValidPhone(telephone))
+            {
+                tbxErrorTelephone.Visibility = Visibility.Visible;
+                valide = false;
+            }
+            else
+                tbxErrorTelephone.Visibility = Visibility.Collapsed;
+            if (string.IsNullOrWhiteSpace(email) || !IsValidEmail(email))
+            {
+                tbxErrorEmail.Visibility = Visibility.Visible;
+                valide = false;
+            }
+            else
+                tbxErrorEmail.Visibility = Visibility.Collapsed;
+
+            if (valide)
+            {
+
                 //Set les nouvelles valeurs
-                /*------------------------------Décommenter pour que ça fonctionne------------------------------
-                currentCli.Nom = txtNom.Text;
-                currentCli.Adresse = txtAdresse.Text;
-                currentCli.Telephone = txtTelephone.Text;
-                currentCli.Email = txtCourriel.Text;
-                */
+                currentCli.Nom = nom;
+                currentCli.Adresse = adresse;
+                currentCli.Telephone = telephone;
+                currentCli.Email = email;
+
                 //Modifier le client dans la BDD
                 SingletonGeneralUse.getInstance().ModifierClient(currentCli);
+
+                //Naviguer vers la page liste client
+                Frame.Navigate(typeof(PageAfficherClients));
                 //Afficher le toast de succès (mainwindow.xaml et .cs)
                 ((MainWindow)App.fenetrePrincipale).ShowToast("Client modifié !");
             }
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

@@ -27,7 +27,9 @@ namespace TravailDeSession
         ObservableCollection<Client> listeClients;
         ObservableCollection<Employe> listeEmployes;
         ObservableCollection<Projet> listeProjets;
+        ObservableCollection<EmployeProjet> listeEmpProj;
         List<int> listeIdentifiants;
+        ObservableCollection<string> listeMatricules;
         static SingletonGeneralUse instance = null;
         protected string AdminUsername = "Admin";
         protected string AdminPassword = "root"; // to be hashed later------------------------------------------------------------------------------------------------------------------------------
@@ -38,7 +40,9 @@ namespace TravailDeSession
             listeClients = new ObservableCollection<Client>();
             listeEmployes = new ObservableCollection<Employe>();
             listeProjets = new ObservableCollection<Projet>();
+            listeEmpProj = new ObservableCollection<EmployeProjet>();
             listeIdentifiants = new List<int>();
+            listeMatricules = new ObservableCollection<string>();
         }
         //retourne l’instance du singleton
         public static SingletonGeneralUse getInstance()
@@ -51,6 +55,8 @@ namespace TravailDeSession
         public ObservableCollection<Client> ListeClients { get => listeClients; }
         public ObservableCollection<Employe> ListeEmployes { get => listeEmployes; }
         public ObservableCollection<Projet> ListeProjets { get => listeProjets; }
+        public ObservableCollection<string> ListeMatDispo { get => listeMatricules; }
+        public ObservableCollection<EmployeProjet> ListeEmpProj { get => listeEmpProj; }
 
         /*-------------------------------------------------------Méthodes Générales-------------------------------------------------------*/
 
@@ -122,27 +128,25 @@ namespace TravailDeSession
                 Debug.WriteLine(ex.Message);
             }
         }
-
-        public async Task<Client?> getClientWithId(int id) // charge la liste avec tous les clients
+        public Client getClientWithId(int id) // charge la liste avec tous les clients
         {
             try
             {
                 // Connection sql
-                await using MySqlConnection con = new MySqlConnection(stringConnectionSql);
-                await con.OpenAsync();
+                using MySqlConnection con = new MySqlConnection(stringConnectionSql);
 
                 // Commande sql
-                await using MySqlCommand commande = con.CreateCommand();
-                commande.CommandText = "FuncTrouverClientParId";
+                using MySqlCommand commande = new MySqlCommand("ProcTrouverClientParId", con);
                 commande.CommandType = CommandType.StoredProcedure;
 
                 // Ajout des paramètres
-                commande.Parameters.AddWithValue("@id", id);
+                commande.Parameters.AddWithValue("@p_id", id);
 
                 // Lecture des résultats
-                using MySqlDataReader r = (MySqlDataReader)await commande.ExecuteReaderAsync();
+                con.Open();
+                using MySqlDataReader r = commande.ExecuteReader();
 
-                if (await r.ReadAsync())
+                if (r.Read())
                 {
                     int identifiant = r.GetInt32("id"); // Make sure this matches your DB column
                     string nom = r.IsDBNull("nom") ? "" : r.GetString("nom");
@@ -178,7 +182,7 @@ namespace TravailDeSession
 
                 //Commande sql
                 using MySqlCommand commande = con.CreateCommand();
-                commande.CommandText = "SELECT identifiant FROM clients";
+                commande.CommandText = "SELECT * FROM vidclient";
                 using MySqlDataReader r = commande.ExecuteReader();
 
                 //Lecture et copie des résultats
@@ -187,11 +191,8 @@ namespace TravailDeSession
                     try
                     {
                         //Ajout des identifiants à la liste des identifiants
-                        foreach (int id in r)
-                        {
-                            int identifiant = r.GetInt32("identifiant");
+                            int identifiant = r.GetInt32("id");
                             listeIdentifiants.Add(identifiant);
-                        }
                     }
                     catch (Exception ex)
                     {
@@ -245,6 +246,7 @@ namespace TravailDeSession
 
                 //Commande sql
                 MySqlCommand commandeSql = new MySqlCommand("ProcModifClient", con);
+                commandeSql.CommandType = CommandType.StoredProcedure;
 
                 //Ajout des paramètres
                 commandeSql.Parameters.AddWithValue("@p_id", c.Identifiant);
@@ -254,8 +256,8 @@ namespace TravailDeSession
                 commandeSql.Parameters.AddWithValue("@p_email", c.Email);
 
                 //Début traitement SQL
-                commandeSql.Prepare();
                 con.Open();
+                commandeSql.Prepare();
                 int i = commandeSql.ExecuteNonQuery();
 
                 //Vérification de la mise à jour
@@ -280,14 +282,15 @@ namespace TravailDeSession
                 MySqlConnection con = new MySqlConnection(stringConnectionSql);
 
                 //Commande sql
-                MySqlCommand commandeSql = new MySqlCommand("ProdDeleteClient", con);
+                MySqlCommand commandeSql = new MySqlCommand("ProcDeleteClient", con);
+                commandeSql.CommandType = CommandType.StoredProcedure;
 
                 //Ajout des paramètres
                 commandeSql.Parameters.AddWithValue("@p_id", c.Identifiant);
 
                 //Début traitement SQL
-                commandeSql.Prepare();
                 con.Open();
+                commandeSql.Prepare();
                 int i = commandeSql.ExecuteNonQuery();
 
                 //Vérification de la Supression
@@ -335,7 +338,7 @@ namespace TravailDeSession
                         string adresse = r.IsDBNull("adresse") ? "" : r.GetString("adresse");
                         DateTime? dateEmbauche = r.IsDBNull("date_embauche") ? null : r.GetDateTime("date_embauche");
                         double? tauxHoraire = r.IsDBNull("taux_horaire") ? null : r.GetDouble("taux_horaire");
-                        Uri? photoIdentite = r.IsDBNull("photo_url") ? null : new Uri(r.GetString("photo_url"));
+                        string? photoIdentite = r.IsDBNull("photo_url") ? "" : r.GetString("photo_url");
                         string statut = r.IsDBNull("statut") ? "" : r.GetString("statut");
 
                         Employe employe = new Employe(matricule, nom, prenom, dateNaissance ?? DateTime.MinValue, email, adresse, 
@@ -354,6 +357,108 @@ namespace TravailDeSession
                 Debug.WriteLine(ex.Message);
             }
         }
+        public void GetEmployesProjetInfo()
+        {
+            try
+            {
+                using MySqlConnection con = new MySqlConnection(stringConnectionSql);
+                con.Open();
+
+                using MySqlCommand cmd = con.CreateCommand();
+                cmd.CommandText = "GetEmployesProjetInfo";
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                using MySqlDataReader r = cmd.ExecuteReader();
+                while (r.Read())
+                {
+                    try
+                    {
+                        string matricule = r.GetString("matricule");
+                        string numProjet = r.GetString("num_projet");
+                        double heuresTravaillees = r.GetDouble("heures_travaillees");
+                        double tauxHoraire = r.GetDouble("taux_horaire");
+
+                        ListeEmpProj.Add(new EmployeProjet(matricule, numProjet, heuresTravaillees, tauxHoraire));
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine("Erreur lecture employe projet info: " + ex.Message);
+                        continue;
+                    }
+                }
+            }
+            catch (MySqlException ex)
+            {
+                Debug.WriteLine("Erreur SQL: " + ex.Message);
+            }
+        }
+        public void getEmployesEnCours() // charge la liste avec tous les clients
+        {
+            ListeMatDispo.Clear();
+            try
+            {
+                using MySqlConnection con = new MySqlConnection(stringConnectionSql);
+                con.Open();
+
+                using MySqlCommand commande = con.CreateCommand();
+                commande.CommandText = "GetEmployesEnCours";
+                commande.CommandType = CommandType.StoredProcedure;
+
+                using MySqlDataReader r = commande.ExecuteReader()
+        ;
+                while (r.Read())
+                {
+                    try
+                    {
+                        string matricule = r.GetString("matricule");
+                        ListeMatDispo.Add(matricule);
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine("Erreur lors de la lecture d'un matricule: " + ex.Message);
+                        continue;
+                    }
+                }
+            }
+            catch (MySqlException ex)
+            {
+                Debug.WriteLine("Erreur SQL: " + ex.Message);
+            }
+        }
+
+        public void getEmployesTermine() // charge la liste avec tous les clients
+        {
+            ListeMatDispo.Clear();
+            try
+            {
+                using MySqlConnection con = new MySqlConnection(stringConnectionSql);
+                con.Open();
+
+                using MySqlCommand commande = con.CreateCommand();
+                commande.CommandText = "GetEmployesDisponibles";
+                commande.CommandType = CommandType.StoredProcedure;
+
+                using MySqlDataReader r = commande.ExecuteReader()
+        ;
+                while (r.Read())
+                {
+                    try
+                    {
+                        string matricule = r.GetString("matricule");
+                        ListeMatDispo.Add(matricule);
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine("Erreur lors de la lecture d'un matricule: " + ex.Message);
+                        continue;
+                    }
+                }
+            }
+            catch (MySqlException ex)
+            {
+                Debug.WriteLine("Erreur SQL: " + ex.Message);
+            }
+        }
 
         public void AjouterEmploye(Employe e)
         {
@@ -364,6 +469,7 @@ namespace TravailDeSession
 
                 //Commande sql
                 MySqlCommand commandeSql = new MySqlCommand("ProcNouvEmployes", con);
+                commandeSql.CommandType = CommandType.StoredProcedure;
 
                 //Ajout des paramètres
                 commandeSql.Parameters.AddWithValue("@matricule", e.Matricule);
@@ -378,8 +484,8 @@ namespace TravailDeSession
                 commandeSql.Parameters.AddWithValue("@p_statut", e.Statut);
 
                 //Début traitement SQL
-                commandeSql.Prepare();
                 con.Open();
+                commandeSql.Prepare();
                 int i = commandeSql.ExecuteNonQuery();
 
                 //Vérification de l'ajout
@@ -406,6 +512,7 @@ namespace TravailDeSession
 
                 //Commande sql
                 MySqlCommand commandeSql = new MySqlCommand("ProcModifEmployes", con);
+                commandeSql.CommandType = CommandType.StoredProcedure;
 
                 //Ajout des paramètres
                 commandeSql.Parameters.AddWithValue("@p_matricule", e.Matricule);
@@ -420,8 +527,8 @@ namespace TravailDeSession
                 commandeSql.Parameters.AddWithValue("@p_statut", e.Statut);
 
                 //Début traitement SQL
-                commandeSql.Prepare();
                 con.Open();
+                commandeSql.Prepare(); 
                 int i = commandeSql.ExecuteNonQuery();
 
                 //Vérification de la mise à jour
@@ -448,13 +555,14 @@ namespace TravailDeSession
 
                 //Commande sql
                 MySqlCommand commandeSql = new MySqlCommand("ProcDeleteEmployes", con);
+                commandeSql.CommandType = CommandType.StoredProcedure;
 
                 //Ajout des paramètres
                 commandeSql.Parameters.AddWithValue("@p_matricule", e.Matricule);
 
                 //Début traitement SQL
-                commandeSql.Prepare();
                 con.Open();
+                commandeSql.Prepare();
                 int i = commandeSql.ExecuteNonQuery();
 
                 //Vérification de la Supression
@@ -499,7 +607,7 @@ namespace TravailDeSession
                     int nombreEmployesMax = r.GetInt32("nb_employes_requis");
                     double totalSalaireDu = r.GetDouble("total_salaires");
                     string statut = r.GetString("statut");
-                    Client? client = await getClientWithId(r.GetInt32("client_id"));
+                    Client? client = getClientWithId(r.GetInt32("client_id"));
 
                     //Création et ajout du projet dans la liste du singleton
                     Projet projet = new Projet(noProjet, titre, dateDebut, description, budget, nombreEmployesMax, totalSalaireDu, null, statut);
@@ -513,6 +621,81 @@ namespace TravailDeSession
             }
         }
 
+        public async void getAllProjetsEnCours()
+        {
+            ListeProjets.Clear(); //permet de vider la liste avant de la recharger
+            try
+            {
+                //Connection sql
+                using MySqlConnection con = new MySqlConnection(stringConnectionSql);
+                con.Open();
+
+                //Commande sql
+                using MySqlCommand commande = con.CreateCommand();
+                commande.CommandText = "Select * from v_projets_en_cours";
+                using MySqlDataReader r = commande.ExecuteReader();
+
+                //Lecture et copie des résultats
+                while (r.Read())
+                {
+                    string noProjet = r.GetString("numero_projet");
+                    string titre = r.GetString("titre");
+                    DateTime dateDebut = r.GetDateTime("date_debut");
+                    string description = r.GetString("description");
+                    double budget = r.GetDouble("budget");
+                    int nombreEmployesMax = r.GetInt32("nb_employes_requis");
+                    double totalSalaireDu = r.GetDouble("total_salaires");
+                    string statut = r.GetString("statut");
+                    Client? client = getClientWithId(r.GetInt32("client_id"));
+
+                    //Création et ajout du projet dans la liste du singleton
+                    Projet projet = new Projet(noProjet, titre, dateDebut, description, budget, nombreEmployesMax, totalSalaireDu, null, statut);
+                    listeProjets.Add(projet);
+                }
+            }
+            catch (MySqlException ex)
+            {
+                //Coder l'erreure ici
+                Debug.WriteLine(ex.Message);
+            }
+        }
+        public string AjouterProjetRetourNumero(Projet p)
+        {
+            string numeroProjet = string.Empty;
+
+            try
+            {
+                using MySqlConnection con = new MySqlConnection(stringConnectionSql);
+                using MySqlCommand cmd = new MySqlCommand("ProcNouvProjet", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                // Add parameters
+                cmd.Parameters.AddWithValue("@p_titre", p.Titre);
+                cmd.Parameters.AddWithValue("@p_date_debut", p.DateDebut);
+                cmd.Parameters.AddWithValue("@p_description", p.Description);
+                cmd.Parameters.AddWithValue("@p_budget", p.Budget);
+                cmd.Parameters.AddWithValue("@p_nb_employes_requis", p.NombreEmployesMax);
+                cmd.Parameters.AddWithValue("@p_total_salaires", p.TotalSalaireDu);
+                cmd.Parameters.AddWithValue("@p_client_id", p.Client.Identifiant);
+                cmd.Parameters.AddWithValue("@p_statut", p.Statut);
+
+                con.Open();
+
+                using MySqlDataReader reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    // The procedure returns numero_projet
+                    numeroProjet = reader.GetString("numero_projet");
+                    Debug.WriteLine($"Projet ajouté avec numero_projet: {numeroProjet}");
+                }
+            }
+            catch (MySqlException ex)
+            {
+                Debug.WriteLine($"Erreur d'ajout du projet: {ex.Message}");
+            }
+
+            return numeroProjet;
+        }
         public void AjouterProjet(Projet p)
         {
             try
@@ -522,6 +705,7 @@ namespace TravailDeSession
 
                 //Commande sql
                 MySqlCommand commandeSql = new MySqlCommand("ProcNouvProjet", con);
+                commandeSql.CommandType = CommandType.StoredProcedure;
 
                 //Ajout des paramètres
                 commandeSql.Parameters.AddWithValue("@p_titre", p.Titre);
@@ -534,8 +718,8 @@ namespace TravailDeSession
                 commandeSql.Parameters.AddWithValue("@p_statut", p.Statut);
 
                 //Début traitement SQL
-                commandeSql.Prepare();
                 con.Open();
+                commandeSql.Prepare();
                 int i = commandeSql.ExecuteNonQuery();
 
                 //Vérification de l'ajout
@@ -628,6 +812,51 @@ namespace TravailDeSession
             }
         }
 
+
+        /*-------------------------------------------------------Gestion des Employés-Projets-------------------------------------------------------*/
+
+        public void AjouterEmployeProjet(EmployeProjet ep)
+        {
+            try
+            {
+                using MySqlConnection con = new MySqlConnection(stringConnectionSql);
+
+                // Commande sql
+                using MySqlCommand cmd = new MySqlCommand("ProcNouvEmployeProjet", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                // Ajout des paramètres
+                cmd.Parameters.AddWithValue("@p_matricule", ep.Matricule);
+                cmd.Parameters.AddWithValue("@p_num_projet", ep.CodeProjet);
+                cmd.Parameters.AddWithValue("@p_heures_travaillees", ep.HeuresTravaillees);
+                cmd.Parameters.AddWithValue("@p_salaire", ep.TauxHoraire);
+
+                // Début traitement SQL
+                con.Open();
+                cmd.Prepare();
+                int i = cmd.ExecuteNonQuery();
+
+                // Vérification de l'ajout
+                if (i > 0)
+                {
+                    Debug.WriteLine($"Employé {ep.Matricule} ajouté au projet {ep.CodeProjet} !");
+                    GetEmployesProjetInfo();
+                }
+                else
+                {
+                    Debug.WriteLine("Erreur : impossible d’ajouter l’employé au projet (AjouterEmployeProjet())");
+                }
+            }
+            catch (MySqlException ex)
+            {
+                Debug.WriteLine("Erreur MySQL (AjouterEmployeProjet()): " + ex.Message);
+            }
+        }
+
+
+
+
+
         /*-------------------------------------------------------Gestion Imports-------------------------------------------------------*/
 
         public async void ImportClientsAsync()
@@ -705,7 +934,7 @@ namespace TravailDeSession
                             string adresse = v[5];
                             DateTime dateEmbauche = DateTime.Parse(v[6]);
                             double tauxHoraire = Convert.ToDouble(v[7]);
-                            Uri photoIdentite = new Uri(v[8]);
+                            string photoIdentite = v[8];
                             string statut = v[9];
 
                             //Création et ajout de l'employé
@@ -757,7 +986,7 @@ namespace TravailDeSession
                             double budget = Convert.ToDouble(v[4]);
                             int nombreEmployesMax = Convert.ToInt32(v[5]);
                             double totalSalaireDu = Convert.ToDouble(v[6]);
-                            Client? client = await getClientWithId(Convert.ToInt32(v[7]));
+                            Client? client = getClientWithId(Convert.ToInt32(v[7]));
                             string statut = v[8];
 
                             if (client != null)

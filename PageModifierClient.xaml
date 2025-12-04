@@ -8,13 +8,13 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-
     <ScrollViewer VerticalScrollBarVisibility="Auto"
-              HorizontalScrollBarVisibility="Disabled">
+                  HorizontalScrollBarVisibility="Disabled">
 
         <Grid Margin="40">
 
             <Grid.Resources>
+
                 <!-- Colors -->
                 <Color x:Key="PrimaryColor">#D88A34</Color>
                 <Color x:Key="SecondaryColor">#3A6C86</Color>
@@ -27,6 +27,18 @@
                 <SolidColorBrush x:Key="NeutralDarkBrush" Color="{StaticResource NeutralDarkColor}" />
                 <SolidColorBrush x:Key="ErrorBrush" Color="{StaticResource ErrorColor}" />
 
+                <!-- TextBox Style -->
+                <Style TargetType="TextBox">
+                    <Setter Property="FontSize" Value="14"/>
+                    <Setter Property="Margin" Value="0,3,0,10"/>
+                    <Setter Property="Padding" Value="8"/>
+                    <Setter Property="BorderBrush" Value="#C9ADA4"/>
+                    <Setter Property="BorderThickness" Value="1"/>
+                    <Setter Property="Background" Value="White"/>
+                    <Setter Property="Foreground" Value="{StaticResource NeutralDarkBrush}"/>
+                    <Setter Property="CornerRadius" Value="4"/>
+                </Style>
+
                 <!-- Button Style -->
                 <Style TargetType="Button">
                     <Setter Property="FontSize" Value="15"/>
@@ -35,123 +47,96 @@
                     <Setter Property="Padding" Value="8,6"/>
                     <Setter Property="Margin" Value="0,10,0,0"/>
                     <Setter Property="BorderThickness" Value="0"/>
-                    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                    <Setter Property="HorizontalAlignment" Value="Right"/>
+                    <Setter Property="Width" Value="170"/>
                     <Setter Property="Height" Value="38"/>
                     <Setter Property="CornerRadius" Value="5"/>
                 </Style>
+
             </Grid.Resources>
+
 
             <!-- Layout -->
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <!-- Title -->
                 <RowDefinition Height="Auto"/>
-                <!-- Matricule -->
                 <RowDefinition Height="Auto"/>
-                <!-- Nom -->
                 <RowDefinition Height="Auto"/>
-                <!-- Prenom -->
                 <RowDefinition Height="Auto"/>
-                <!-- Date Naissance -->
                 <RowDefinition Height="Auto"/>
-                <!-- Email -->
                 <RowDefinition Height="Auto"/>
-                <!-- Adresse -->
                 <RowDefinition Height="Auto"/>
-                <!-- Date Embauche -->
                 <RowDefinition Height="Auto"/>
-                <!-- Taux Horaire -->
                 <RowDefinition Height="Auto"/>
-                <!-- Photo URL -->
-                <RowDefinition Height="Auto"/>
-                <!-- Statut -->
-                <RowDefinition Height="Auto"/>
-                <!-- Buttons -->
             </Grid.RowDefinitions>
+
 
             <!-- Title -->
             <TextBlock Grid.Row="0"
-                   Text="Détails de l'Employé"
-                   FontSize="22"
-                   HorizontalAlignment="Center"
-                   Foreground="{StaticResource PrimaryBrush}"
-                   FontWeight="SemiBold"
-                   Margin="0,0,0,20"/>
+                       Text="Détails du Client"
+                       x:Name="tbTitre"
+                       FontSize="22"
+                       HorizontalAlignment="Center"
+                       Foreground="{StaticResource PrimaryBrush}"
+                       FontWeight="SemiBold"
+                       Margin="0,0,0,20"/>
 
-            <!-- Matricule -->
+
+            <!-- NOM -->
             <StackPanel Grid.Row="1" Margin="0,5">
-                <TextBlock Text="Matricule" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
-                <TextBlock x:Name="tbMatricule" FontSize="14" Foreground="Black"/>
-            </StackPanel>
-
-            <!-- Nom -->
-            <StackPanel Grid.Row="2" Margin="0,5">
                 <TextBlock Text="Nom" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
-                <TextBlock x:Name="tbNom" FontSize="14" Foreground="Black"/>
+                <TextBox x:Name="tbNom"/>
+                <TextBlock x:Name="tbxErrorNom"
+                           Text="Veuillez entrer un nom valide"
+                           Foreground="{StaticResource ErrorBrush}"
+                           FontSize="12"
+                           Visibility="Collapsed"/>
             </StackPanel>
 
-            <!-- Prénom -->
+
+            <!-- TELEPHONE -->
+            <StackPanel Grid.Row="2" Margin="0,5">
+                <TextBlock Text="Téléphone" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
+                <TextBox x:Name="tbTelephone"/>
+                <TextBlock x:Name="tbxErrorTelephone"
+                           Text="Veuillez entrer un numéro valide"
+                           Foreground="{StaticResource ErrorBrush}"
+                           FontSize="12"
+                           Visibility="Collapsed"/>
+            </StackPanel>
+
+
+            <!-- EMAIL -->
             <StackPanel Grid.Row="3" Margin="0,5">
-                <TextBlock Text="Prénom" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
-                <TextBlock x:Name="tbPrenom" FontSize="14" Foreground="Black"/>
-            </StackPanel>
-
-            <!-- Date de naissance -->
-            <StackPanel Grid.Row="4" Margin="0,5">
-                <TextBlock Text="Date de naissance" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
-                <TextBlock x:Name="tbDateNaissance" FontSize="14" Foreground="Black"/>
-            </StackPanel>
-
-            <!-- Email -->
-            <StackPanel Grid.Row="5" Margin="0,5">
                 <TextBlock Text="Email" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
-                <TextBlock x:Name="tbEmail" FontSize="14" Foreground="Black"/>
+                <TextBox x:Name="tbEmail"/>
+                <TextBlock x:Name="tbxErrorEmail"
+                           Text="Veuillez entrer un email valide"
+                           Foreground="{StaticResource ErrorBrush}"
+                           FontSize="12"
+                           Visibility="Collapsed"/>
             </StackPanel>
 
-            <!-- Adresse -->
-            <StackPanel Grid.Row="6" Margin="0,5">
+
+            <!-- ADRESSE -->
+            <StackPanel Grid.Row="4" Margin="0,5">
                 <TextBlock Text="Adresse" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
-                <TextBlock x:Name="tbAdresse" FontSize="14" Foreground="Black"/>
+                <TextBox x:Name="tbAdresse"/>
+                <TextBlock x:Name="tbxErrorAdresse"
+                           Text="Veuillez entrer une adresse valide"
+                           Foreground="{StaticResource ErrorBrush}"
+                           FontSize="12"
+                           Visibility="Collapsed"/>
             </StackPanel>
 
-            <!-- Date d'embauche -->
-            <StackPanel Grid.Row="7" Margin="0,5">
-                <TextBlock Text="Date d'embauche" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
-                <TextBlock x:Name="tbDateEmbauche" FontSize="14" Foreground="Black"/>
-            </StackPanel>
-
-            <!-- Taux horaire -->
-            <StackPanel Grid.Row="8" Margin="0,5">
-                <TextBlock Text="Taux horaire" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
-                <TextBlock x:Name="tbTauxHoraire" FontSize="14" Foreground="Black"/>
-            </StackPanel>
-
-            <!-- Photo URL -->
-            <StackPanel Grid.Row="9" Margin="0,5">
-                <TextBlock Text="Photo URL" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
-                <TextBlock x:Name="tbPhotoURL" FontSize="14" Foreground="Black"/>
-            </StackPanel>
-
-            <!-- Statut -->
-            <StackPanel Grid.Row="10" Margin="0,5">
-                <TextBlock Text="Statut (Actif / Inactif)" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
-                <TextBlock x:Name="tbStatut" FontSize="14" Foreground="Black"/>
-            </StackPanel>
 
             <!-- Buttons -->
-            <StackPanel Grid.Row="11" Orientation="Horizontal" HorizontalAlignment="Stretch" Spacing="10" Margin="0,20,0,0">
-                <Grid HorizontalAlignment="Stretch">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <Button Grid.Column="0" Content="Modifier" HorizontalAlignment="Stretch" Click="Modifier_Click"/>
-                    <Button Grid.Column="1" Content="Supprimer" Background="{StaticResource ErrorBrush}" HorizontalAlignment="Stretch" />
-                </Grid>
+            <StackPanel Grid.Row="9" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10" Margin="0,20,0,0">
+                <Button Content="Modifier" Click="Modifier_Click"/>
             </StackPanel>
 
         </Grid>
+
     </ScrollViewer>
 
 </Page>
