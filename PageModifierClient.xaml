@@ -34,7 +34,6 @@
                     <Setter Property="Padding" Value="8"/>
                     <Setter Property="BorderBrush" Value="#C9ADA4"/>
                     <Setter Property="BorderThickness" Value="1"/>
-                    <Setter Property="Background" Value="White"/>
                     <Setter Property="Foreground" Value="{StaticResource NeutralDarkBrush}"/>
                     <Setter Property="CornerRadius" Value="4"/>
                 </Style>

@@ -53,32 +53,6 @@ namespace TravailDeSession
             }
         }
 
-        private async void btnSupprimer_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button btn)
-            {
-                ContentDialog dialog = new ContentDialog
-                {
-                    Title = "Confirmation",
-                    Content = "Voulez-vous vraiment supprimer cet employé?",
-                    PrimaryButtonText = "Oui",
-                    CloseButtonText = "Non",
-                    XamlRoot = this.XamlRoot
-                };
-
-                var result = await dialog.ShowAsync();
-                if (result == ContentDialogResult.Primary)
-                {
-                    SingletonGeneralUse.getInstance().SupprimerEmploye(currentEmp);
-
-                    Frame.Navigate(typeof(PageAfficherEmploye));
-
-                    //Afficher le toast de succès (mainwindow.xaml et .cs)
-                    ((MainWindow)App.fenetrePrincipale).ShowToast("Employé supprimé !");
-                }
-            }
-        }
-
         bool IsValidEmail(string email)
         {
             return Regex.IsMatch(email,

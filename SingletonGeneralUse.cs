@@ -582,7 +582,7 @@ namespace TravailDeSession
 
         /*-------------------------------------------------------Gestion des Projets-------------------------------------------------------*/
 
-        public async void getAllProjets() //charge la liste avec tous les clients
+        public void getAllProjets() //charge la liste avec tous les clients
         {
             ListeProjets.Clear(); //permet de vider la liste avant de la recharger
             try
@@ -621,7 +621,7 @@ namespace TravailDeSession
             }
         }
 
-        public async void getAllProjetsEnCours()
+        public void getAllProjetsEnCours()
         {
             ListeProjets.Clear(); //permet de vider la liste avant de la recharger
             try
@@ -649,7 +649,7 @@ namespace TravailDeSession
                     Client? client = getClientWithId(r.GetInt32("client_id"));
 
                     //Création et ajout du projet dans la liste du singleton
-                    Projet projet = new Projet(noProjet, titre, dateDebut, description, budget, nombreEmployesMax, totalSalaireDu, null, statut);
+                    Projet projet = new Projet(noProjet, titre, dateDebut, description, budget, nombreEmployesMax, totalSalaireDu, client, statut);
                     listeProjets.Add(projet);
                 }
             }
@@ -746,6 +746,7 @@ namespace TravailDeSession
 
                 //Commande sql
                 MySqlCommand commandeSql = new MySqlCommand("ProcModifProjet", con);
+                commandeSql.CommandType = CommandType.StoredProcedure;
 
                 //Ajout des paramètres
                 commandeSql.Parameters.AddWithValue("@p_numero_projet", p.NoProjet);
@@ -759,8 +760,8 @@ namespace TravailDeSession
                 commandeSql.Parameters.AddWithValue("@p_statut", p.Statut);
 
                 //Début traitement SQL
-                commandeSql.Prepare();
                 con.Open();
+                commandeSql.Prepare();
                 int i = commandeSql.ExecuteNonQuery();
 
                 //Vérification de la mise à jour
@@ -788,13 +789,14 @@ namespace TravailDeSession
 
                 //Commande sql
                 MySqlCommand commandeSql = new MySqlCommand("ProcDeleteProjet", con);
+                commandeSql.CommandType = CommandType.StoredProcedure;
 
                 //Ajout des paramètres
                 commandeSql.Parameters.AddWithValue("@p_numero_projet", p.NoProjet);
 
                 //Début traitement SQL
-                commandeSql.Prepare();
                 con.Open();
+                commandeSql.Prepare();
                 int i = commandeSql.ExecuteNonQuery();
 
                 //Vérification de la Supression
@@ -853,6 +855,119 @@ namespace TravailDeSession
             }
         }
 
+        public void GetAllEmployesProjet(int numProjet)
+        {
+            ListeEmpProj.Clear();
+            try
+            {
+                using MySqlConnection con = new MySqlConnection(stringConnectionSql);
+
+                // Commande sql
+                using MySqlCommand cmd = new MySqlCommand("Select * from VAEmpProj", con);
+                using MySqlDataReader r = cmd.ExecuteReader();
+
+                // Début traitement SQL
+                con.Open();
+                cmd.Prepare();
+
+                while (r.Read())
+                {
+                    string matricule = r.GetString("matricule");
+                    string codeProjet = r.GetString("numero_projet");
+                    double heuresTravaillees = r.GetDouble("heures_travaillees");
+                    double salaire = r.GetDouble("salaire");
+
+                    // Création et ajout de l'employé-projet dans la liste
+                    EmployeProjet ep = new EmployeProjet(matricule, codeProjet, heuresTravaillees, salaire);
+                    ListeEmpProj.Add(ep);
+                }
+            }
+            catch (MySqlException ex)
+            {
+                Debug.WriteLine("Erreur MySQL (GetAllEmployesProjet()): " + ex.Message);
+            }
+        }
+
+        public void GetEmployesEnCoursParProjet(string numProjet)
+        {
+            listeEmpProj.Clear();
+            try
+            {
+                using MySqlConnection con = new MySqlConnection(stringConnectionSql);
+
+                // Commande sql
+                using MySqlCommand cmd = new MySqlCommand("GetEmployesEnCoursParProjet", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                // Ajout du paramètre
+                cmd.Parameters.AddWithValue("@p_num_projet", numProjet);
+
+                // Début traitement SQL
+                con.Open();
+                cmd.Prepare();
+
+                using MySqlDataReader r = cmd.ExecuteReader();
+                while (r.Read())
+                {
+                    string matricule = r.GetString("matricule");
+                    string numeroProjet = r.GetString("num_projet");
+                    double heuresTravaillees = r.GetDouble("heures_travaillees");
+                    double salaire = r.GetDouble("salaire");
+
+                    // Création et ajout de l'employé-projet dans la liste
+                    EmployeProjet ep = new EmployeProjet(
+                        matricule,
+                        numeroProjet,
+                        heuresTravaillees,
+                        salaire
+                    );
+
+                    listeEmpProj.Add(ep);
+                }
+            }
+            catch (MySqlException ex)
+            {
+                Debug.WriteLine("Erreur MySQL (GetEmployesProjet()): " + ex.Message);
+            }
+        }
+
+        public void UpdateEmployesForProjet(EmployeProjet ep)
+        {
+            try
+            {
+                using MySqlConnection con = new MySqlConnection(stringConnectionSql);
+
+                // Commande SQL
+                using MySqlCommand cmd = new MySqlCommand("UpdateEmployesForProjet", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                // Ajout des paramètres
+                cmd.Parameters.AddWithValue("@p_codeProjet", ep.CodeProjet);
+                cmd.Parameters.AddWithValue("@p_matricule", ep.Matricule);
+                cmd.Parameters.AddWithValue("@p_heuresTravaillees", ep.HeuresTravaillees);
+                cmd.Parameters.AddWithValue("@p_tauxHoraire", ep.TauxHoraire);
+
+                // Début traitement SQL
+                con.Open();
+                cmd.Prepare();
+                int i = cmd.ExecuteNonQuery();
+
+                // Vérification
+                if (i > 0)
+                {
+                    Debug.WriteLine($"Employé {ep.Matricule} mis à jour dans le projet {ep.CodeProjet} !");
+                    GetEmployesProjetInfo();
+                }
+                else
+                {
+                    Debug.WriteLine("Erreur : impossible de mettre à jour l’employé (UpdateEmployesForProjet())");
+                }
+            }
+            catch (MySqlException ex)
+            {
+                Debug.WriteLine("Erreur MySQL (UpdateEmployesForProjet()): " + ex.Message);
+            }
+        }
 
 
 
