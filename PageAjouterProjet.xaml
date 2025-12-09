@@ -149,7 +149,7 @@ MinWidth="200"/>
                     <NumberBox x:Name="txtNbEmployesRequis"
                            Minimum="0" Maximum="5" SmallChange="1" LargeChange="1" Margin="0,3,0,0"
                            ValueChanged="txtNbEmployesRequis_ValueChanged"
-                           Width="80"/>
+                           Width="80" PlaceholderText="0-5"/>
                     <Button Content="✔"
                             Margin="5,0,0,0"
                             Width="35"/>

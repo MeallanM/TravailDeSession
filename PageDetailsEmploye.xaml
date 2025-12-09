@@ -133,7 +133,7 @@
             <!-- PHOTO URL -->
             <StackPanel Grid.Row="9" Margin="0,5">
                 <TextBlock Text="Photo" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
-                <Image x:Name="imgPhoto" Width="150" Height="150" Stretch="UniformToFill"/>
+                <Image x:Name="imgPhoto" Width="150" Height="150" Stretch="UniformToFill" HorizontalAlignment="left"/>
             </StackPanel>
 
             <!-- STATUT -->
