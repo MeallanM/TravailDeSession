@@ -388,42 +388,7 @@ namespace TravailDeSession
 
             return emp;
         }
-        public void GetEmployesProjetInfo()
-        {
-            AutreListeEmpProj.Clear();
-            try
-            {
-                using MySqlConnection con = new MySqlConnection(stringConnectionSql);
-                con.Open();
-
-                using MySqlCommand cmd = con.CreateCommand();
-                cmd.CommandText = "GetEmployesProjetInfo";
-                cmd.CommandType = CommandType.StoredProcedure;
-
-                using MySqlDataReader r = cmd.ExecuteReader();
-                while (r.Read())
-                {
-                    try
-                    {
-                        string matricule = r.GetString("matricule");
-                        string numProjet = r.GetString("num_projet");
-                        double heuresTravaillees = r.GetDouble("heures_travaillees");
-                        double tauxHoraire = r.GetDouble("salaire");
-
-                        AutreListeEmpProj.Add(new EmployeProjet(matricule, numProjet, heuresTravaillees, tauxHoraire));
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine("Erreur lecture employe projet info: " + ex.Message);
-                        continue;
-                    }
-                }
-            }
-            catch (MySqlException ex)
-            {
-                Debug.WriteLine("Erreur SQL: " + ex.Message);
-            }
-        }
+        
         public void getEmployesEnCours() // charge la liste avec tous les clients
         {
             ListeMatDispo.Clear();
@@ -652,7 +617,42 @@ namespace TravailDeSession
                 Debug.WriteLine(ex.Message);
             }
         }
+        public void GetEmployesProjetInfo()
+        {
+            AutreListeEmpProj.Clear();
+            try
+            {
+                using MySqlConnection con = new MySqlConnection(stringConnectionSql);
+                con.Open();
 
+                using MySqlCommand cmd = con.CreateCommand();
+                cmd.CommandText = "GetEmployesProjetInfo";
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                using MySqlDataReader r = cmd.ExecuteReader();
+                while (r.Read())
+                {
+                    try
+                    {
+                        string matricule = r.GetString("matricule");
+                        string numProjet = r.GetString("num_projet");
+                        double heuresTravaillees = r.GetDouble("heures_travaillees");
+                        double tauxHoraire = r.GetDouble("salaire");
+
+                        AutreListeEmpProj.Add(new EmployeProjet(matricule, numProjet, heuresTravaillees, tauxHoraire));
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine("Erreur lecture employe projet info: " + ex.Message);
+                        continue;
+                    }
+                }
+            }
+            catch (MySqlException ex)
+            {
+                Debug.WriteLine("Erreur SQL: " + ex.Message);
+            }
+        }
         public void getAllProjetsEnCours()
         {
             ListeProjets.Clear(); //permet de vider la liste avant de la recharger
