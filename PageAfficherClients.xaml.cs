@@ -33,12 +33,38 @@ namespace TravailDeSession
             SingletonGeneralUse.getInstance().getAllClients();
             Clients = SingletonGeneralUse.getInstance().ListeClients;
         }
-        private void btnAjoutClient_Click(object sender, RoutedEventArgs e)
+        private async void btnAjoutClient_Click(object sender, RoutedEventArgs e)
         {
+            if (!SingletonGeneralUse.getInstance().IsAdminLogged)
+            {
+                ContentDialog d = new ContentDialog
+                {
+                    Title = "Accès refusé",
+                    Content = "Vous devez être administrateur.",
+                    CloseButtonText = "OK",
+                    XamlRoot = this.Content.XamlRoot
+                };
+
+                await d.ShowAsync();
+                return;
+            }
             Frame.Navigate(typeof(PageAjouterClient));
         }
-        private void lvAfficher_ItemClick(object sender, ItemClickEventArgs e)
+        private async void lvAfficher_ItemClick(object sender, ItemClickEventArgs e)
         {
+            if (!SingletonGeneralUse.getInstance().IsAdminLogged)
+            {
+                ContentDialog d = new ContentDialog
+                {
+                    Title = "Accès refusé",
+                    Content = "Vous devez être administrateur.",
+                    CloseButtonText = "OK",
+                    XamlRoot = this.Content.XamlRoot
+                };
+
+                await d.ShowAsync();
+                return;
+            }
             var selectedClient = e.ClickedItem as Client;
             var frame = Frame ?? ((Frame)Microsoft.UI.Xaml.Window.Current.Content);
                 if (selectedClient is Client cli)

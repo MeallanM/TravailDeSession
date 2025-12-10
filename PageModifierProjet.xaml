@@ -73,7 +73,7 @@
 
             <!-- Title -->
             <TextBlock Grid.Row="0"
-                       Text="Créer un Projet"
+                       x:Name="tbTitre"
                        FontSize="22"
                        HorizontalAlignment="Center"
                        Foreground="{StaticResource PrimaryBrush}"
@@ -92,6 +92,13 @@
                            Visibility="Collapsed"/>
             </StackPanel>
 
+            <ComboBox 
+                x:Name="CbbxClient"
+                                SelectedIndex="0"
+                Header="Client"
+                PlaceholderText="Choisir un client"
+                Margin="0,3,0,10"
+                MinWidth="200"/>
 
             <!-- DATE DÉBUT -->
             <StackPanel Grid.Row="2" Margin="0,5">
@@ -123,7 +130,10 @@
             <!-- BUDGET -->
             <StackPanel Grid.Row="4" Margin="0,5">
                 <TextBlock Text="Budget" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
-                <TextBox x:Name="txtBudget" PlaceholderText="Ex: 120000"/>
+                <NumberBox x:Name="txtBudget"
+PlaceholderText="Ex: 120000"
+Margin="0,3,0,0"
+SpinButtonPlacementMode="Inline" />
                 <TextBlock x:Name="tbxErrorBudget"
                            Text="Veuillez entrer un budget valide"
                            Foreground="{StaticResource ErrorBrush}"
@@ -133,40 +143,75 @@
 
 
             <!-- NB EMPLOYÉS REQUIS -->
-            <StackPanel Grid.Row="5" Margin="0,5">
+            <StackPanel Grid.Row="5" Margin="0,5" Orientation="Vertical">
                 <TextBlock Text="Nombre d'employés requis" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
-                <TextBox x:Name="txtNbEmployesRequis" PlaceholderText="Ex: 8"/>
+                <StackPanel Orientation="Horizontal">
+                    <NumberBox x:Name="txtNbEmployesRequis"
+                           Minimum="0" Maximum="5" SmallChange="1" LargeChange="1" Margin="0,3,0,0"
+                           Width="80"/>
+                </StackPanel>
                 <TextBlock x:Name="tbxErrorNbEmployes"
-                           Text="Veuillez entrer un nombre valide"
-                           Foreground="{StaticResource ErrorBrush}"
-                           FontSize="12"
-                           Visibility="Collapsed"/>
+               Text="Veuillez entrer un nombre valide"
+               Foreground="{StaticResource ErrorBrush}"
+               FontSize="12"
+               Visibility="Collapsed"/>
+                <TextBlock x:Name="tbxErrorSelectionEmp"
+Text="Veuillez sélectionner des employés différends"
+Foreground="{StaticResource ErrorBrush}"
+FontSize="12"
+Visibility="Collapsed"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="6" Margin="0,10,0,0">
+                <TextBlock Text="Sélection des employés" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}" Margin="0,0,0,5"/>
+
+                <Grid x:Name="grdEmployesSelection" ColumnSpacing="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Column 0: Matricule TextBoxes -->
+                    <StackPanel x:Name="spEmployesSelection" Grid.Column="0" Orientation="Vertical" Spacing="5">
+                        <ComboBox x:Name="cbMatricule1" PlaceholderText="Matricule 1"/>
+                        <ComboBox x:Name="cbMatricule2" PlaceholderText="Matricule 2"/>
+                        <ComboBox x:Name="cbMatricule3" PlaceholderText="Matricule 3"/>
+                        <ComboBox x:Name="cbMatricule4" PlaceholderText="Matricule 4"/>
+                        <ComboBox x:Name="cbMatricule5" PlaceholderText="Matricule 5"/>
+                    </StackPanel>
+
+                    <!-- Column 1: Hours NumberBoxes -->
+                    <StackPanel x:Name="spHeuresTravail" Grid.Column="1" Orientation="Vertical" Spacing="5">
+                        <NumberBox x:Name="nbHeures1" PlaceholderText="Heures 1" Minimum="0" Maximum="500"/>
+                        <NumberBox x:Name="nbHeures2" PlaceholderText="Heures 2" Minimum="0" Maximum="500"/>
+                        <NumberBox x:Name="nbHeures3" PlaceholderText="Heures 3" Minimum="0" Maximum="500"/>
+                        <NumberBox x:Name="nbHeures4" PlaceholderText="Heures 4" Minimum="0" Maximum="500"/>
+                        <NumberBox x:Name="nbHeures5" PlaceholderText="Heures 5" Minimum="0" Maximum="500"/>
+                    </StackPanel>
+
+                    <!-- Column 2: Employee info -->
+                    <StackPanel Grid.Column="2" Orientation="Vertical" Margin="0,0,0,0">
+                        <TextBlock Text="Total Salaires:" FontSize="14" Foreground="{StaticResource SecondaryBrush}" Margin="0,0,0,5" x:Name="tbTotalSalaire"/>
+                        <TextBlock x:Name="tbEmployesDetails" FontSize="13" TextWrapping="Wrap" Height="300" Padding="5"/>
+                    </StackPanel>
+                </Grid>
             </StackPanel>
 
 
             <!-- TOTAL SALAIRES -->
-            <StackPanel Grid.Row="6" Margin="0,5">
-                <TextBlock Text="Total salaires" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
-                <TextBox x:Name="txtTotalSalaires" PlaceholderText="Ex: 50000"/>
-                <TextBlock x:Name="tbxErrorSalaires"
-                           Text="Veuillez entrer un total valide"
-                           Foreground="{StaticResource ErrorBrush}"
-                           FontSize="12"
-                           Visibility="Collapsed"/>
-            </StackPanel>
-
-
-            <!-- CLIENT ID -->
             <StackPanel Grid.Row="7" Margin="0,5">
-                <TextBlock Text="Client ID" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
-                <TextBox x:Name="txtClientId"/>
-                <TextBlock x:Name="tbxErrorClientId"
-                           Text="Veuillez entrer un ID client valide"
-                           Foreground="{StaticResource ErrorBrush}"
-                           FontSize="12"
-                           Visibility="Collapsed"/>
+                <TextBlock Text="Total salaires" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
+                <NumberBox x:Name="txtTotalSalaires"
+   PlaceholderText="Ex: 50000"
+   Margin="0,3,0,0"
+   SpinButtonPlacementMode="Inline" />
+                <TextBlock x:Name="tbxErrorSalaires"
+   Text="Veuillez entrer un total valide"
+   Foreground="{StaticResource ErrorBrush}"
+   FontSize="12"
+   Visibility="Collapsed"/>
             </StackPanel>
-
 
             <!-- STATUT -->
             <StackPanel Grid.Row="8" Margin="0,5">
@@ -177,11 +222,10 @@
                               Margin="0,3,0,10"/>
             </StackPanel>
 
-
             <!-- BUTTON -->
             <Button Grid.Row="9"
                     Content="Modifier le Projet"
-                    Click="Modifier_Click"/>
+                    Click="BtnModifier_Click"/>
         </Grid>
 
     </ScrollViewer>

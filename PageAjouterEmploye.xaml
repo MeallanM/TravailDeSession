@@ -83,7 +83,7 @@
         <!-- NOM -->
         <StackPanel Grid.Row="1" Margin="0,5">
             <TextBlock Text="Nom" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
-            <TextBox x:Name="txtNom"/>
+                <TextBox x:Name="tbNom"/>
             <TextBlock x:Name="tbxErrorNom"
                        Text="Veuillez entrer un nom valide"
                        Foreground="{StaticResource ErrorBrush}"
@@ -95,7 +95,7 @@
         <!-- PRENOM -->
         <StackPanel Grid.Row="2" Margin="0,5">
             <TextBlock Text="Prénom" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
-            <TextBox x:Name="txtPrenom"/>
+                <TextBox x:Name="tbPrenom"/>
             <TextBlock x:Name="tbxErrorPrenom"
                        Text="Veuillez entrer un prénom valide"
                        Foreground="{StaticResource ErrorBrush}"
@@ -119,7 +119,7 @@
         <!-- EMAIL -->
         <StackPanel Grid.Row="4" Margin="0,5">
             <TextBlock Text="Email" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
-            <TextBox x:Name="txtEmail"/>
+                <TextBox x:Name="tbEmail"/>
             <TextBlock x:Name="tbxErrorEmail"
                        Text="Veuillez entrer un email valide"
                        Foreground="{StaticResource ErrorBrush}"
@@ -131,7 +131,7 @@
         <!-- ADRESSE -->
         <StackPanel Grid.Row="5" Margin="0,5">
             <TextBlock Text="Adresse" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
-            <TextBox x:Name="txtAdresse"/>
+                <TextBox x:Name="tbAdresse"/>
             <TextBlock x:Name="tbxErrorAdresse"
                        Text="Veuillez entrer une adresse valide"
                        Foreground="{StaticResource ErrorBrush}"
@@ -155,7 +155,7 @@
         <!-- TAUX HORAIRE -->
         <StackPanel Grid.Row="7" Margin="0,5">
             <TextBlock Text="Taux horaire" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
-            <TextBox x:Name="txtTauxHoraire" PlaceholderText="Ex: 25.50"/>
+                <TextBox x:Name="tbTauxHoraire" PlaceholderText="Ex: 25.50"/>
             <TextBlock x:Name="tbxErrorTaux"
                        Text="Veuillez entrer un taux horaire valide"
                        Foreground="{StaticResource ErrorBrush}"
@@ -167,7 +167,7 @@
         <!-- PHOTO URL -->
         <StackPanel Grid.Row="8" Margin="0,5">
             <TextBlock Text="Photo URL" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
-            <TextBox x:Name="txtPhotoURL"/>
+                <TextBox x:Name="imgPhoto"/>
             <TextBlock x:Name="tbxErrorPhoto"
                        Text="Veuillez entrer une URL valide"
                        Foreground="{StaticResource ErrorBrush}"
@@ -178,15 +178,15 @@
 
         <!-- STATUT (bool) -->
         <StackPanel Grid.Row="9" Margin="0,5">
-            <TextBlock Text="Statut (Actif / Inactif)" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
-            <ToggleSwitch x:Name="tsStatut" OffContent="Inactif" OnContent="Actif" Margin="0,3,0,10"/>
+            <TextBlock Text="Statut (Journalier / Permanent)" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
+            <ToggleSwitch x:Name="tsStatut" OffContent="Permanent" OnContent="Journalier" IsOn="True" Margin="0,3,0,10"/>
         </StackPanel>
 
 
         <!-- Button  TU PEUX L'ENLEVER SI TA PAS BESOIN-->
         <Button Grid.Row="10"
                 Content="Créer l'Employé"
-                Click="Button_Click"/>
+                Click="EmployeCreation_Click"/>
     </Grid>
 
     </ScrollViewer>

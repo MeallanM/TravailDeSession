@@ -30,7 +30,7 @@ namespace TravailDeSession
             mainFrame.Navigate(typeof(PageAfficherProjets));
         }
 
-        private void navView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
+        private async void navView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
         {
             if (args.InvokedItemContainer is NavigationViewItem item)
             {
@@ -45,11 +45,34 @@ namespace TravailDeSession
                     case "AfficherEmployes":
                         mainFrame.Navigate(typeof(PageAfficherEmploye));
                         break;
+                    case "AjouterAdmin":
+                        var dialog = new AddDialog();
+                        dialog.XamlRoot = this.Content.XamlRoot;
+                        var result = await dialog.ShowAsync();
+
+                        if (result == ContentDialogResult.Primary)
+                        {
+                            bool ok = SingletonGeneralUse.getInstance()
+                                         .AjouterAdmin(dialog.Nom, dialog.Mdp);
+
+                            ContentDialog info = new ContentDialog
+                            {
+                                XamlRoot = this.Content.XamlRoot,
+                                Title = ok ? "Succès" : "Erreur",
+                                Content = ok ? "Administrateur ajouté" : "Impossible d'ajouter l'admin",
+                                CloseButtonText = "OK"
+                            };
+
+                            await info.ShowAsync();
+                        }
+                        break;
                     case "Connection":
                         ShowLoginDialogAsync();
                         break;
                     case "Deconnection":
-                        SingletonGeneralUse.getInstance().AdminIsAdmin = false;
+                        SingletonGeneralUse.getInstance().LogoutAdmin();
+                        UpdateAdminFooter();
+                        mainFrame.Navigate(typeof(PageAfficherProjets));
                         break;
                     case "Quitter":
                         Application.Current.Exit();
@@ -98,38 +121,42 @@ namespace TravailDeSession
         // Afficher la boîte de dialogue de connexion (LoginDialog.xaml)
         public async void ShowLoginDialogAsync()
         {
-            //Création et initialisation de la boîte de dialogue
             var dialog = new LoginDialog();
             dialog.XamlRoot = this.Content.XamlRoot;
+
             var result = await dialog.ShowAsync();
 
-            //Traitement des informations de connexion
             if (result == ContentDialogResult.Primary)
             {
                 string nom = dialog.Username;
                 string mdp = dialog.Password;
 
-                if (SingletonGeneralUse.getInstance().ValiderAdmin(nom, mdp)) // your logic
+                // NEW correct logic
+                bool success = SingletonGeneralUse.getInstance().LoginAdmin(nom, mdp);
+
+                if (success)
                 {
-                    // Connection réussie
-                    SingletonGeneralUse.getInstance().AdminIsAdmin = true;
+                    UpdateAdminFooter();
+                    return;
                 }
                 else
                 {
-                    // Connection échouée
                     ContentDialog error = new ContentDialog
                     {
-                        Title = "Connection échouée",
-                        Content = "Nom ou mot de passe invalide",
+                        Title = "Connexion échouée",
+                        Content = "Nom ou mot de passe invalide.",
                         CloseButtonText = "OK",
                         XamlRoot = this.Content.XamlRoot
                     };
 
                     await error.ShowAsync();
-                    return;
+
+                    
+
+                    // Allow retry by showing the login dialog again
+                    ShowLoginDialogAsync();
                 }
             }
-
         }
 
         public void ShowToast(string message)
@@ -158,6 +185,18 @@ namespace TravailDeSession
         {
             ToastContainer.Visibility = Visibility.Collapsed;
             _toastTimer?.Stop();
+        }
+
+        public void UpdateAdminFooter()
+        {
+            if (SingletonGeneralUse.getInstance().IsAdminLogged)
+            {
+                txtAdminFooter.Text = $"Connecté en tant que {SingletonGeneralUse.getInstance().CurrentAdmin.Username}";
+            }
+            else
+            {
+                txtAdminFooter.Text = "";
+            }
         }
     }
 }

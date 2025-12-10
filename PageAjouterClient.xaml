@@ -40,7 +40,7 @@
             <!-- Button Style  -->
             <Style TargetType="Button">
                 <Setter Property="FontSize" Value="15"/>
-                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="Foreground" Value="{StaticResource NeutralDarkBrush}"/>
                 <Setter Property="Background" Value="{StaticResource PrimaryBrush}"/>
                 <Setter Property="Padding" Value="8,6"/>
                 <Setter Property="Margin" Value="0,10,0,0"/>

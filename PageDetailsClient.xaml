@@ -48,49 +48,45 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <!-- Title -->
             <TextBlock Grid.Row="0"
-                   Text="Détails du Client"
+                       x:Name="tbTitre"
                    FontSize="22"
                    HorizontalAlignment="Center"
                    Foreground="{StaticResource PrimaryBrush}"
                    FontWeight="SemiBold"
                    Margin="0,0,0,20"/>
 
-            <!-- ID -->
-            <StackPanel Grid.Row="1" Margin="0,5">
-                <TextBlock Text="id" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
-                <TextBlock x:Name="tbId" FontSize="14" Foreground="Black"/>
-            </StackPanel>
 
             <!-- NOM -->
-            <StackPanel Grid.Row="1" Margin="0,5">
+            <StackPanel Grid.Row="2" Margin="0,5">
                 <TextBlock Text="Nom" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
-                <TextBlock x:Name="tbNom" FontSize="14" Foreground="Black"/>
+                <TextBlock x:Name="tbNom" FontSize="14" Foreground="{StaticResource SecondaryColor}"/>
             </StackPanel>
 
             <!-- ADRESSE -->
-            <StackPanel Grid.Row="2" Margin="0,5">
+            <StackPanel Grid.Row="3" Margin="0,5">
                 <TextBlock Text="Adresse" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
-                <TextBlock x:Name="tbAdresse" FontSize="14" Foreground="Black"/>
+                <TextBlock x:Name="tbAdresse" FontSize="14" Foreground="{StaticResource SecondaryColor}"/>
             </StackPanel>
 
             <!-- TELEPHONE -->
-            <StackPanel Grid.Row="3" Margin="0,5">
+            <StackPanel Grid.Row="4" Margin="0,5">
                 <TextBlock Text="Téléphone" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
-                <TextBlock x:Name="tbTelephone" FontSize="14" Foreground="Black"/>
+                <TextBlock x:Name="tbTelephone" FontSize="14" Foreground="{StaticResource SecondaryColor}"/>
             </StackPanel>
 
             <!-- EMAIL -->
-            <StackPanel Grid.Row="4" Margin="0,5">
+            <StackPanel Grid.Row="5" Margin="0,5">
                 <TextBlock Text="Email" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
-                <TextBlock x:Name="tbEmail" FontSize="14" Foreground="Black"/>
+                <TextBlock x:Name="tbEmail" FontSize="14" Foreground="{StaticResource SecondaryColor}"/>
             </StackPanel>
 
             <!-- Modifier / Supprimer Buttons -->
-            <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Stretch" Spacing="10" Margin="0,20,0,0">
+            <StackPanel Grid.Row="6" Orientation="Horizontal" HorizontalAlignment="Stretch" Spacing="10" Margin="0,20,0,0">
                 <Grid HorizontalAlignment="Stretch">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -103,6 +99,7 @@
                         Click="BtnModifier_Click"/>
                     <Button Grid.Column="1"
                         Content="Supprimer"
+                            Tag="{x:Bind}"
                         Background="{StaticResource ErrorBrush}"
                         HorizontalAlignment="Stretch"
                         Click="btnSupprimer_Click"/>

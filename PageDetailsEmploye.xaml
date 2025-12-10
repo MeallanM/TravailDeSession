@@ -59,7 +59,7 @@
 
             <!-- Title -->
             <TextBlock Grid.Row="0"
-                   Text="Détails de l'Employé"
+                   x:Name="tbTitre"
                    FontSize="22"
                    HorizontalAlignment="Center"
                    Foreground="{StaticResource PrimaryBrush}"
@@ -133,20 +133,18 @@
             <!-- PHOTO URL -->
             <StackPanel Grid.Row="9" Margin="0,5">
                 <TextBlock Text="Photo" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
-                <Image x:Name="imgPhoto" Width="150" Height="150" Stretch="UniformToFill"/>
+                <Image x:Name="imgPhoto" Width="150" Height="150" Stretch="UniformToFill" HorizontalAlignment="left"/>
             </StackPanel>
 
             <!-- STATUT -->
             <StackPanel Grid.Row="10" Margin="0,5">
                 <TextBlock Text="Statut" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
-                <TextBlock x:Name="tbStatut"
-                       FontSize="14"
-                       Foreground="{StaticResource SecondaryBrush}"/>
+                <ToggleSwitch x:Name="tsStatut" OffContent="Permanent" OnContent="Journalier" Margin="0,3,0,10"/>
             </StackPanel>
 
             <!-- Buttons -->
             <StackPanel Grid.Row="11"  Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10" Margin="0,20,0,0">
-                <Button Content="Modifier"/>
+                <Button Content="Modifier" Click="BtnModifier_Click"/>
                 <Button Content="Supprimer" Background="{StaticResource ErrorBrush}" Click="btnSupprimer_Click"/>
             </StackPanel>
 

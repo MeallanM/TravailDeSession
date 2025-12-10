@@ -25,16 +25,31 @@ namespace TravailDeSession
     /// </summary>
     public sealed partial class PageAfficherProjets : Page
     {
+        //Collection contexte pour lister les projets
         ObservableCollection<Projet> Projets;
         public PageAfficherProjets()
         {
             InitializeComponent();
-            SingletonGeneralUse.getInstance().getAllProjets();
+            //Récupération de la liste des projets en cours
+            SingletonGeneralUse.getInstance().getAllProjetsEnCours();
             Projets = SingletonGeneralUse.getInstance().ListeProjets;
         }
-
-        private void lvAfficher_ItemClick(object sender, ItemClickEventArgs e)
+        /*On click de la gridview*/
+        private async void lvAfficher_ItemClick(object sender, ItemClickEventArgs e)
         {
+            if (!SingletonGeneralUse.getInstance().IsAdminLogged)
+            {
+                ContentDialog d = new ContentDialog
+                {
+                    Title = "Accès refusé",
+                    Content = "Vous devez être administrateur.",
+                    CloseButtonText = "OK",
+                    XamlRoot = this.Content.XamlRoot
+                };
+
+                await d.ShowAsync();
+                return;
+            }
             var frame = Frame ?? ((Frame)Microsoft.UI.Xaml.Window.Current.Content);
 
             if (e.ClickedItem is Projet proj)
@@ -42,8 +57,22 @@ namespace TravailDeSession
                 frame.Navigate(typeof(PageDetailsProjet), proj);
             }
         }
-        private void btnAjouterProjet_Click(object sender, RoutedEventArgs e)
+        //On click du bouton ajouter projet
+        private async void btnAjouterProjet_Click(object sender, RoutedEventArgs e)
         {
+            if (!SingletonGeneralUse.getInstance().IsAdminLogged)
+            {
+                ContentDialog d = new ContentDialog
+                {
+                    Title = "Accès refusé",
+                    Content = "Vous devez être administrateur.",
+                    CloseButtonText = "OK",
+                    XamlRoot = this.Content.XamlRoot
+                };
+
+                await d.ShowAsync();
+                return;
+            }
             Frame.Navigate(typeof(PageAjouterProjet));
         }
     }

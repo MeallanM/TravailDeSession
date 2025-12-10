@@ -58,7 +58,7 @@
                Grid.Row="0"
                Margin="0,10"/>
 
-    <!-- GridView (scrolls automatically) -->
+    <!-- GridView -->
     <GridView Grid.Row="1"
               ItemsSource="{x:Bind Clients}"
               IsItemClickEnabled="True"
