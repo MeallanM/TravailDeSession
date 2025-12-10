@@ -607,7 +607,7 @@ namespace TravailDeSession
                     Client? client = getClientWithId(r.GetInt32("client_id"));
 
                     //Création et ajout du projet dans la liste du singleton
-                    Projet projet = new Projet(noProjet, titre, dateDebut, description, budget, nombreEmployesMax, totalSalaireDu, null, statut);
+                    Projet projet = new Projet(noProjet, titre, dateDebut, description, budget, nombreEmployesMax, totalSalaireDu, client, statut);
                     listeProjets.Add(projet);
                 }
             }
@@ -1245,7 +1245,7 @@ namespace TravailDeSession
                 foreach (var p in SingletonGeneralUse.getInstance().ListeProjets)
                 {
                     // Format: noProjet;titre;dateDebut;description;budget;nombreEmployesMax;totalSalaireDu;clientId;statut
-                    string ligne = $"{p.NoProjet};{p.Titre};{p.DateDebut:yyyy-MM-dd};{p.Description};{p.Budget};{p.NombreEmployesMax};{p.TotalSalaireDu};{p.Client.Identifiant};{p.Statut}";
+                    string ligne = $"{p.NoProjet};{p.Titre};{p.Client.Identifiant};{p.DateDebut:yyyy-MM-dd};{p.Description};{p.Budget};{p.NombreEmployesMax};{p.TotalSalaireDu};{p.Statut}";
                     lignes.Add(ligne);
                 }
 
