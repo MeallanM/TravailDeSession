@@ -148,15 +148,7 @@ SpinButtonPlacementMode="Inline" />
                 <StackPanel Orientation="Horizontal">
                     <NumberBox x:Name="txtNbEmployesRequis"
                            Minimum="0" Maximum="5" SmallChange="1" LargeChange="1" Margin="0,3,0,0"
-                           ValueChanged="txtNbEmployesRequis_ValueChanged"
                            Width="80"/>
-                    <Button Content="✔"
-                            Margin="5,0,0,0"
-                            Width="35"/>
-                    <Button Content="⟳"
-                        Margin="5,0,0,0"
-                Width="35"
-                Click="BtnRefresh_Click"/>
                 </StackPanel>
                 <TextBlock x:Name="tbxErrorNbEmployes"
                Text="Veuillez entrer un nombre valide"
@@ -176,18 +168,32 @@ Visibility="Collapsed"/>
                 <Grid x:Name="grdEmployesSelection" ColumnSpacing="10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <StackPanel x:Name="spEmployesSelection" Grid.Column="0" Orientation="Vertical"/>
+                    <!-- Column 0: Matricule TextBoxes -->
+                    <StackPanel x:Name="spEmployesSelection" Grid.Column="0" Orientation="Vertical" Spacing="5">
+                        <ComboBox x:Name="cbMatricule1" PlaceholderText="Matricule 1"/>
+                        <ComboBox x:Name="cbMatricule2" PlaceholderText="Matricule 2"/>
+                        <ComboBox x:Name="cbMatricule3" PlaceholderText="Matricule 3"/>
+                        <ComboBox x:Name="cbMatricule4" PlaceholderText="Matricule 4"/>
+                        <ComboBox x:Name="cbMatricule5" PlaceholderText="Matricule 5"/>
+                    </StackPanel>
 
-                    <StackPanel x:Name="spEmployesInfos" Grid.Column="1" Orientation="Vertical" Margin="0,0,0,0">
+                    <!-- Column 1: Hours NumberBoxes -->
+                    <StackPanel x:Name="spHeuresTravail" Grid.Column="1" Orientation="Vertical" Spacing="5">
+                        <NumberBox x:Name="nbHeures1" PlaceholderText="Heures 1" Minimum="0" Maximum="500"/>
+                        <NumberBox x:Name="nbHeures2" PlaceholderText="Heures 2" Minimum="0" Maximum="500"/>
+                        <NumberBox x:Name="nbHeures3" PlaceholderText="Heures 3" Minimum="0" Maximum="500"/>
+                        <NumberBox x:Name="nbHeures4" PlaceholderText="Heures 4" Minimum="0" Maximum="500"/>
+                        <NumberBox x:Name="nbHeures5" PlaceholderText="Heures 5" Minimum="0" Maximum="500"/>
+                    </StackPanel>
+
+                    <!-- Column 2: Employee info -->
+                    <StackPanel Grid.Column="2" Orientation="Vertical" Margin="0,0,0,0">
                         <TextBlock Text="Total Salaires:" FontSize="14" Foreground="{StaticResource SecondaryBrush}" Margin="0,0,0,5" x:Name="tbTotalSalaire"/>
-                        <TextBlock x:Name="tbEmployesDetails"
-    FontSize="13"
-    TextWrapping="Wrap"
-    Height="300"
-    Padding="5"/>
+                        <TextBlock x:Name="tbEmployesDetails" FontSize="13" TextWrapping="Wrap" Height="300" Padding="5"/>
                     </StackPanel>
                 </Grid>
             </StackPanel>

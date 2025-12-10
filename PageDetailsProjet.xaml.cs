@@ -86,21 +86,20 @@ public sealed partial class PageDetailsProjet : Page
 
             if (!string.IsNullOrWhiteSpace(matricule))
             {
-                var emp = EmployeProj.FirstOrDefault(x => x.Matricule == matricule);
-
-                if (emp != null)
+                var emproj = EmployeProj.FirstOrDefault(x => x.Matricule == matricule && x.CodeProjet == currentProj.NoProjet);
+                if (emproj != null)
                 {
-                    double salaire = emp.HeuresTravaillees * emp.TauxHoraire;
+                    double salaire = emproj.HeuresTravaillees * emproj.TauxHoraire;
                     totalSalaire += salaire;
 
                     tbEmployesDetails.Text +=
-                        $"Emp: {emp.Matricule}, TxH: {emp.TauxHoraire:0.00}, " +
-                        $"Hrs: {emp.HeuresTravaillees:0.##}, Salaire: {salaire}$\n";
+                        $"Emp: {emproj.Matricule}, TxH: {emproj.TauxHoraire:0.00}, " +
+                        $"Hrs: {emproj.HeuresTravaillees:0.##}, Salaire: {salaire}$\n";
                 }
             }
         }
 
-        tbTotalSalaireDetails.Text = $"Total Salaires: {totalSalaire:0.##}";
+        tbTotalSalaireDetails.Text = $"Total Salaires: {totalSalaire:0.##}$";
     }
 
     private async void btnSupprimer_Click(object sender, RoutedEventArgs e)

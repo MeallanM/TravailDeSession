@@ -178,8 +178,8 @@
 
         <!-- STATUT (bool) -->
         <StackPanel Grid.Row="9" Margin="0,5">
-            <TextBlock Text="Statut (Actif / Inactif)" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
-            <ToggleSwitch x:Name="tsStatut" OffContent="Inactif" OnContent="Actif" Margin="0,3,0,10"/>
+            <TextBlock Text="Statut (Journalier / Permanent)" FontSize="15" Foreground="{StaticResource NeutralDarkBrush}"/>
+            <ToggleSwitch x:Name="tsStatut" OffContent="Permanent" OnContent="Journalier" IsOn="True" Margin="0,3,0,10"/>
         </StackPanel>
 
 

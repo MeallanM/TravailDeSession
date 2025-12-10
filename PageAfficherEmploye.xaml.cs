@@ -34,8 +34,21 @@ namespace TravailDeSession
             Employes = SingletonGeneralUse.getInstance().ListeEmployes;
         }
 
-        private void lvAfficher_ItemClick(object sender, ItemClickEventArgs e)
+        private async void lvAfficher_ItemClick(object sender, ItemClickEventArgs e)
         {
+            if (!SingletonGeneralUse.getInstance().IsAdminLogged)
+            {
+                ContentDialog d = new ContentDialog
+                {
+                    Title = "Accès refusé",
+                    Content = "Vous devez être administrateur.",
+                    CloseButtonText = "OK",
+                    XamlRoot = this.Content.XamlRoot
+                };
+
+                await d.ShowAsync();
+                return;
+            }
             var frame = Frame ?? ((Frame)Microsoft.UI.Xaml.Window.Current.Content);
 
             if (e.ClickedItem is Employe emp)
@@ -43,8 +56,21 @@ namespace TravailDeSession
                 frame.Navigate(typeof(PageDetailsEmploye), emp);
             }
         }
-        private void btnAjouterEmploye_Click(object sender, RoutedEventArgs e)
+        private async void btnAjouterEmploye_Click(object sender, RoutedEventArgs e)
         {
+            if (!SingletonGeneralUse.getInstance().IsAdminLogged)
+            {
+                ContentDialog d = new ContentDialog
+                {
+                    Title = "Accès refusé",
+                    Content = "Vous devez être administrateur.",
+                    CloseButtonText = "OK",
+                    XamlRoot = this.Content.XamlRoot
+                };
+
+                await d.ShowAsync();
+                return;
+            }
             Frame.Navigate(typeof(PageAjouterEmploye));
         }
     }

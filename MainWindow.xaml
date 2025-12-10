@@ -75,9 +75,13 @@
             </NavigationView.MenuItems>
 
             <NavigationView.FooterMenuItems>
+                <NavigationViewItem Content="Ajouter Admin" x:Name="nviAjout" Icon="Add" Tag="AjouterAdmin" />
                 <NavigationViewItem Content="Connexion" x:Name="nviConnection" Icon="Switch" Tag="Connection" />
                 <NavigationViewItem Content="Déconnexion" x:Name="nviDeconnection" Icon="Switch" Tag="Deconnection" />
-                <NavigationViewItem Content="Aide" x:Name="nviAide" Icon="Help" Tag="aide"/>
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                    <FontIcon Glyph="&#xE13D;" />
+                    <TextBlock x:Name="txtAdminFooter" Text="" />
+                </StackPanel>
                 <NavigationViewItem Content="Quitter" x:Name="nviQuit" Icon="LeaveChat" Tag="Quitter"/>
             </NavigationView.FooterMenuItems>
             <Frame x:Name="mainFrame" />

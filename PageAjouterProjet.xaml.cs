@@ -26,6 +26,8 @@ namespace TravailDeSession
     /// </summary>
     public sealed partial class PageAjouterProjet : Page
     {
+        List<ComboBox> comboBoxes;
+        List<NumberBox> numberboxes;
         public ObservableCollection<int> ListeClients { get; set; } = new();
         public ObservableCollection<string> MatriculesLibres { get; set; } = new ObservableCollection<string>();
         public ObservableCollection<string> matriculesEmpProj { get; set; } = new ObservableCollection<string>();
@@ -41,33 +43,60 @@ namespace TravailDeSession
             }
             CbbxClient.ItemsSource = ListeClients;
             dpDateDebut.Date = DateTime.MinValue;
+            SingletonGeneralUse.getInstance().getEmployesTermine();
+            MatriculesLibres = SingletonGeneralUse.getInstance().ListeMatDispo;
+            comboBoxes = new List<ComboBox> { cbMatricule1, cbMatricule2, cbMatricule3, cbMatricule4, cbMatricule5 };
+            numberboxes = new List<NumberBox> { nbHeures1, nbHeures2, nbHeures3, nbHeures4, nbHeures5 };
+            for (int i = 0; i < comboBoxes.Count; i++)
+            {
+                comboBoxes[i].ItemsSource = MatriculesLibres;
+                comboBoxes[i].SelectionChanged += (s, ev) => UpdateEmployesInfos();
+                numberboxes[i].ValueChanged += (s, ev) => UpdateEmployesInfos();
+            }
         }
 
         private bool CheckDupePickedMatricule()
         {
             HashSet<string> selectedMat = new HashSet<string>();
-            foreach (ComboBox cb in spEmployesSelection.Children)
+
+            foreach (var cb in comboBoxes)
             {
                 if (cb.SelectedItem == null)
                 {
-                    tbxErrorNbEmployes.Text = "Erreur: Doublon d'employés sélectionnés ou rien de sélectionné";
+                    continue;
+                }
+
+                // If using SelectedValuePath="Matricule" in ComboBox
+                string matricule = cb.SelectedItem?.ToString();
+
+                if (string.IsNullOrEmpty(matricule))
+                {
+                    tbxErrorNbEmployes.Text = "Erreur : Doublon d'employés sélectionnés ou rien de sélectionné";
                     tbxErrorNbEmployes.Visibility = Visibility.Visible;
                     return false;
                 }
-                string matricule = cb.SelectedItem.ToString();
+
                 if (selectedMat.Contains(matricule))
                 {
+                    tbxErrorNbEmployes.Text = "Erreur : Doublon d'employés sélectionnés ou rien de sélectionné";
+                    tbxErrorNbEmployes.Visibility = Visibility.Visible;
                     return false;
                 }
+
                 selectedMat.Add(matricule);
             }
+
+            // Clear error if all is fine
+            tbxErrorNbEmployes.Text = "";
+            tbxErrorNbEmployes.Visibility = Visibility.Collapsed;
+
             return true;
         }
         // On click du bouton créer projet
         private void ProjetCreation_Click(object sender, RoutedEventArgs e)
         {
             bool valide = true;
-
+            
             // Récupération des valeurs des champs
             string titre = txtTitre.Text.Trim();
             DateTime dateDebut = dpDateDebut.Date.Date;
@@ -120,6 +149,30 @@ namespace TravailDeSession
                 valide = false;
             }
             else tbxErrorSalaires.Visibility = Visibility.Collapsed;
+            int filledCount = 0;
+            double maxPeople = txtNbEmployesRequis.Value;
+            // Count how many rows are fully filled
+            for (int i = 0; i < comboBoxes.Count; i++)
+            {
+                if (comboBoxes[i].SelectedItem != null)
+                {
+                    if (!string.IsNullOrEmpty(comboBoxes[i].SelectedItem.ToString()) && numberboxes[i].Value != double.NaN)
+                    {
+                        filledCount++;
+                    }
+                }
+
+            }
+            if (filledCount != maxPeople)
+            {
+                tbxErrorNbEmployes.Text = $"Erreur : vous devez remplir exactement {maxPeople} entrées.";
+                tbxErrorNbEmployes.Visibility = Visibility.Visible;
+                valide = false;
+            }
+            else
+            {
+                tbxErrorNbEmployes.Visibility = Visibility.Collapsed;
+            }
 
             // --- SI TOUT EST OK ---
             if (valide)
@@ -139,19 +192,29 @@ namespace TravailDeSession
                 string noProj = SingletonGeneralUse.getInstance().AjouterProjetRetourNumero(p);
                 p.NoProjet = noProj;
                 // Ajout des employés au projet
-                foreach (ComboBox cb in spEmployesSelection.Children)
+                for (int i = 0; i < comboBoxes.Count; i++)
                 {
+                    ComboBox cb = comboBoxes[i];
+                    NumberBox nb = numberboxes[i];
+
+                    if (cb.SelectedItem == null)
+                        continue; // skip empty rows
+
                     string matricule = cb.SelectedItem.ToString();
-                    var emp = EmployeProj.FirstOrDefault(x => x.Matricule == matricule);
+                    if (string.IsNullOrEmpty(matricule))
+                        continue; // skip empty rows
+                    var emp = SingletonGeneralUse.getInstance().GetEmployeByMatricule(matricule);
+
                     if (emp != null)
                     {
+                        double heureT = nb.Value;
                         EmployeProjet ep = new EmployeProjet(
                             emp.Matricule,
                             p.NoProjet,
-                            emp.HeuresTravaillees,
+                            heureT,
                             emp.TauxHoraire
                         );
-                        SingletonGeneralUse.getInstance().AjouterEmployeProjet(ep);
+                        SingletonGeneralUse.getInstance().UpdateEmployesForProjet(ep);
                     }
                 }
 
@@ -162,12 +225,7 @@ namespace TravailDeSession
         private void UpdateEmployesInfos()
         {
             SingletonGeneralUse.getInstance().GetEmployesProjetInfo();
-            EmployeProj = SingletonGeneralUse.getInstance().ListeEmpProj;
-            foreach (var empPro in EmployeProj)
-            {
-                if (!string.IsNullOrWhiteSpace(empPro.Matricule))
-                    matriculesEmpProj.Add(empPro.Matricule);
-            }
+            EmployeProj = SingletonGeneralUse.getInstance().AutreListeEmpProj;
             tbEmployesDetails.Text = "";
             totalSalaire = 0;
             foreach (ComboBox cb in spEmployesSelection.Children)
@@ -176,62 +234,28 @@ namespace TravailDeSession
                 {
                     string matricule = cb.SelectedItem.ToString();
                     var emp = EmployeProj.FirstOrDefault(x => x.Matricule == matricule);
+                    var empIfNull = SingletonGeneralUse.getInstance().GetEmployeByMatricule(matricule);
                     if (emp != null)
                     {
                         double salaire = emp.HeuresTravaillees * emp.TauxHoraire;
                         totalSalaire += salaire;
                         tbEmployesDetails.Text += $"Emp: {emp.Matricule}, TxH: {emp.TauxHoraire:0.00}, Hrs: {emp.HeuresTravaillees:0.##}, Salaire: {salaire}$\n";
                     }
+                    else
+                    {
+                        int i = comboBoxes.IndexOf(cb);
+                        if (numberboxes[i].Value != double.NaN)
+                        {
+                            double salaire = numberboxes[i].Value * empIfNull.TauxHoraire;
+                            totalSalaire += salaire;
+                            tbEmployesDetails.Text += $"Emp: {empIfNull.Matricule}, TxH: {empIfNull.TauxHoraire:0.00}, Hrs: {numberboxes[i].Value:0.##}, Salaire: {salaire}$\n";
+                        }
+
+                    }
                 }
                 
             }
             tbTotalSalaire.Text = $"Total Salaires: {totalSalaire:0.##}";
-        }
-
-        //Fonction qui gère l'ajout ou le retrait des combobox selon le nombre d'employés requis
-        private void txtNbEmployesRequis_ValueChanged(NumberBox sender, NumberBoxValueChangedEventArgs args)
-        {
-            if (sender.Value % 1 != 0)
-                sender.Value = Math.Floor(sender.Value);
-            if (sender.Value > 5 || sender.Value < 0 || double.IsNaN(sender.Value))
-            {
-                tbxErrorNbEmployes.Text = "Erreur: Nombre d'employés requis doit être entre 0 et 5";
-                tbxErrorNbEmployes.Visibility = Visibility.Visible;
-                return;
-            }
-            else if (!CheckDupePickedMatricule())
-            {
-                tbxErrorNbEmployes.Text = "Erreur: Doublon d'employés sélectionnés ou rien de sélectionné";
-                tbxErrorNbEmployes.Visibility = Visibility.Visible;
-            }
-            else tbxErrorNbEmployes.Visibility = Visibility.Collapsed;
-            int required = (int)sender.Value;
-
-            // Ajout des matricules libres à la liste
-            SingletonGeneralUse.getInstance().getEmployesTermine();
-            MatriculesLibres = SingletonGeneralUse.getInstance().ListeMatDispo;
-
-            int current = spEmployesSelection.Children.Count;
-            if (required > current)
-            {
-                for (int i = current; i < required; i++)
-                {
-                    ComboBox cb = new ComboBox()
-                    {
-                        ItemsSource = MatriculesLibres,
-                        PlaceholderText = "Sélectionner un employé",
-                        Width = double.NaN, // stretch horizontally
-                    };
-                    cb.SelectionChanged += (s, e) => UpdateEmployesInfos();
-                    spEmployesSelection.Children.Add(cb);
-                }
-            }
-            else if (required < current)
-            {
-                while (spEmployesSelection.Children.Count > required)
-                    spEmployesSelection.Children.RemoveAt(spEmployesSelection.Children.Count - 1);
-                UpdateEmployesInfos();
-            }
         }
         private void BtnRefresh_Click(object sender, RoutedEventArgs e)
         {

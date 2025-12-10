@@ -18,7 +18,6 @@ using TravailDeSession;
 using Windows.Media.Protection.PlayReady;
 using Windows.Storage;
 using WinRT.Interop;
-
 namespace TravailDeSession
 {
     internal class SingletonGeneralUse
@@ -28,12 +27,12 @@ namespace TravailDeSession
         ObservableCollection<Employe> listeEmployes;
         ObservableCollection<Projet> listeProjets;
         ObservableCollection<EmployeProjet> listeEmpProj;
+        ObservableCollection<EmployeProjet> autreListeEmpProj;
         List<int> listeIdentifiants;
         ObservableCollection<string> listeMatricules;
         static SingletonGeneralUse instance = null;
-        protected string AdminUsername = "Admin";
-        protected string AdminPassword = "root"; // to be hashed later------------------------------------------------------------------------------------------------------------------------------
-        protected bool adminIsAdmin = false;
+        public Admin CurrentAdmin { get; private set; }
+        public bool IsAdminLogged => CurrentAdmin != null;
         private SingletonGeneralUse()
         {
             stringConnectionSql = "Server=cours.cegep3r.info;Database=a2025_420335-345ri_greq7;Uid=2377057;Pwd=2377057;";
@@ -41,6 +40,7 @@ namespace TravailDeSession
             listeEmployes = new ObservableCollection<Employe>();
             listeProjets = new ObservableCollection<Projet>();
             listeEmpProj = new ObservableCollection<EmployeProjet>();
+            autreListeEmpProj = new ObservableCollection<EmployeProjet>();
             listeIdentifiants = new List<int>();
             listeMatricules = new ObservableCollection<string>();
         }
@@ -57,6 +57,7 @@ namespace TravailDeSession
         public ObservableCollection<Projet> ListeProjets { get => listeProjets; }
         public ObservableCollection<string> ListeMatDispo { get => listeMatricules; }
         public ObservableCollection<EmployeProjet> ListeEmpProj { get => listeEmpProj; }
+        public ObservableCollection<EmployeProjet> AutreListeEmpProj { get => autreListeEmpProj; }
 
         /*-------------------------------------------------------Méthodes Générales-------------------------------------------------------*/
 
@@ -357,8 +358,39 @@ namespace TravailDeSession
                 Debug.WriteLine(ex.Message);
             }
         }
+        public Employe GetEmployeByMatricule(string matricule)
+        {
+            Employe emp = null;
+            try
+            {
+                using MySqlConnection con = new MySqlConnection(stringConnectionSql);
+                using MySqlCommand cmd = new MySqlCommand("ProcGetEmployeByMatricule", con);
+
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@pMatricule", matricule);
+
+                con.Open();
+
+                using MySqlDataReader reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    emp = new Employe
+                    {
+                        Matricule = reader.GetString("Matricule"),
+                        TauxHoraire = reader.GetDouble("taux_horaire")
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
+
+            return emp;
+        }
         public void GetEmployesProjetInfo()
         {
+            AutreListeEmpProj.Clear();
             try
             {
                 using MySqlConnection con = new MySqlConnection(stringConnectionSql);
@@ -376,9 +408,9 @@ namespace TravailDeSession
                         string matricule = r.GetString("matricule");
                         string numProjet = r.GetString("num_projet");
                         double heuresTravaillees = r.GetDouble("heures_travaillees");
-                        double tauxHoraire = r.GetDouble("taux_horaire");
+                        double tauxHoraire = r.GetDouble("salaire");
 
-                        ListeEmpProj.Add(new EmployeProjet(matricule, numProjet, heuresTravaillees, tauxHoraire));
+                        AutreListeEmpProj.Add(new EmployeProjet(matricule, numProjet, heuresTravaillees, tauxHoraire));
                     }
                     catch (Exception ex)
                     {
@@ -1227,20 +1259,89 @@ namespace TravailDeSession
 
         /*-------------------------------------------------------Connections Administrateur-------------------------------------------------------*/
 
-        public bool AdminIsAdmin { get => adminIsAdmin; set => adminIsAdmin = value; }
-
-        public bool ValiderAdmin(string nom, string mdp)
+        public Admin GetAdminByUsername(string username)
         {
-            if (nom.Equals(AdminUsername) && mdp.Equals(AdminPassword))
+            Admin admin = null;
+            try
             {
-                return true;
+                using MySqlConnection con = new MySqlConnection(stringConnectionSql);
+                using MySqlCommand cmd = new MySqlCommand("GetAdminByUsername", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@p_username", username);
+
+                con.Open();
+                using MySqlDataReader reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    admin = new Admin
+                    {
+                        Id = reader.GetInt32("id"),
+                        Username = reader.GetString("username"),
+                        PasswordHash = reader.GetString("password")
+                    };
+                }
             }
-            else
+            catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
+            return admin;
+        }
+        public bool AjouterAdmin(string nom, string mdp)
+        {
+            try
+            {
+                // Hashing the password BEFORE going to SQL
+                string hashedPwd = BCrypt.Net.BCrypt.HashPassword(mdp);
+
+                using MySqlConnection con = new MySqlConnection(stringConnectionSql);
+                using MySqlCommand cmd = new MySqlCommand("ProcAjouterAdmin", con);
+
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@p_nom", nom);
+                cmd.Parameters.AddWithValue("@p_mdp", hashedPwd);
+
+                con.Open();
+                int rows = cmd.ExecuteNonQuery();
+
+                return rows > 0;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
                 return false;
             }
         }
+        public bool LoginAdmin(string username, string plainPassword)
+        {
+            try
+            {
+                Admin dbAdmin = GetAdminByUsername(username);
 
+                if (dbAdmin == null)
+                    return false;
 
+                // BCrypt password verification
+                bool ok = BCrypt.Net.BCrypt.Verify(plainPassword, dbAdmin.PasswordHash);
+
+                if (ok)
+                {
+                    CurrentAdmin = dbAdmin;   // Save admin session
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
+
+            return false;
+        }
+        public void LogoutAdmin()
+        {
+            CurrentAdmin = null;
+        }
     }
 }
